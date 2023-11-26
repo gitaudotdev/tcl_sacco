@@ -1,0 +1,38 @@
+body{
+  font-size: 16px !important;
+}
+.logo{
+  float:left;
+  display: inline-block;
+}
+.logo .reportTitle{
+  margin-left:40mm !important;
+  margin-top:-15mm;
+}
+.activityType{
+  font-weight: lighter;
+  font-size:16px;
+  margin-left: 1.5% !important;
+}
+hr{
+  border: 0 !important;
+  border-top: 4px dotted #ddd !important;
+}
+table{
+  font-family: sans-serif;
+  border-collapse: collapse;
+  margin:5mm 0mm 0mm 0mm;
+}
+.tableheader{
+  margin:3mm 0mm 3mm 0mm;
+}
+td {
+  font-size: 20px !important;
+	padding: 3mm 3mm 3mm 0mm;
+  text-align: left;
+}
+th{
+  width:200px;
+  padding:3mm 3mm;
+  text-align: left;
+}

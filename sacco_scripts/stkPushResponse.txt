@@ -1,0 +1,485 @@
+Array
+(
+    [Body] => Array
+        (
+            [stkCallback] => Array
+                (
+                    [MerchantRequestID] => 17588-22489118-9
+                    [CheckoutRequestID] => ws_CO_09032023191144267724763654
+                    [ResultCode] => 0
+                    [ResultDesc] => The service request is processed successfully.
+                    [CallbackMetadata] => Array
+                        (
+                            [Item] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Name] => Amount
+                                            [Value] => 50
+                                        )
+
+                                    [1] => Array
+                                        (
+                                            [Name] => MpesaReceiptNumber
+                                            [Value] => RD45CWTQ5R
+                                        )
+
+                                    [2] => Array
+                                        (
+                                            [Name] => TransactionDate
+                                            [Value] => 20230404112106
+                                        )
+
+                                    [3] => Array
+                                        (
+                                            [Name] => PhoneNumber
+                                            [Value] => 254728960173
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+    [push] => Array
+        (
+            [Body] => Array
+                (
+                    [stkCallback] => Array
+                        (
+                            [MerchantRequestID] => 127495-155124535-1
+                            [CheckoutRequestID] => ws_CO_04042023133444438728960173
+                            [ResultCode] => 0
+                            [ResultDesc] => The service request is processed successfully.
+                            [CallbackMetadata] => Array
+                                (
+                                    [Item] => Array
+                                        (
+                                            [0] => Array
+                                                (
+                                                    [Name] => Amount
+                                                    [Value] => 05
+                                                )
+
+                                            [1] => Array
+                                                (
+                                                    [Name] => MpesaReceiptNumber
+                                                    [Value] => RD45CWTQ4R
+                                                )
+
+                                            [2] => Array
+                                                (
+                                                    [Name] => TransactionDate
+                                                    [Value] => 20230404112106
+                                                )
+
+                                            [3] => Array
+                                                (
+                                                    [Name] => PhoneNumber
+                                                    [Value] => 254728960173
+                                                )
+
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WJGE7Y
+    [TransTime] => 20230424122512
+    [TransAmount] => 5.00
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 33990071
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 266.00
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254791979265
+    [FirstName] => Davies
+    [MiddleName] => Ngwiri
+    [LastName] => Gitau
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WJGE7Y
+    [TransTime] => 20230424122512
+    [TransAmount] => 5
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 33990071
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 266
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254791979265
+    [FirstName] => Davies
+    [MiddleName] => Ngwiri
+    [LastName] => Gitau
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WJGE7Y
+    [TransTime] => 20230424122512
+    [TransAmount] => 5
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 33990071
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 266
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254791979265
+    [FirstName] => Davies
+    [MiddleName] => Ngwiri
+    [LastName] => Gitau
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WJGE7Y
+    [TransTime] => 20230424122512
+    [TransAmount] => 5
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 33990071
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 266
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254791979265
+    [FirstName] => Davies
+    [MiddleName] => Ngwiri
+    [LastName] => Gitau
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WJGE7Y
+    [TransTime] => 20230424122512
+    [TransAmount] => 5
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 33990071
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 266
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254791979265
+    [FirstName] => Davies
+    [MiddleName] => Ngwiri
+    [LastName] => Gitau
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WJGE7Y
+    [TransTime] => 20230424122512
+    [TransAmount] => 5
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 33990071
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 266
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254791979265
+    [FirstName] => Davies
+    [MiddleName] => Ngwiri
+    [LastName] => Gitau
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WJGE7Y
+    [TransTime] => 20230424122512
+    [TransAmount] => 5
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 33990070
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 266
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254791979265
+    [FirstName] => Davies
+    [MiddleName] => Ngwiri
+    [LastName] => Gitau
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WJGE8Y
+    [TransTime] => 20230424122512
+    [TransAmount] => 5
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 33990070
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 266
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254791979265
+    [FirstName] => Davies
+    [MiddleName] => Ngwiri
+    [LastName] => Gitau
+)
+Array
+(
+    [Body] => Array
+        (
+            [stkCallback] => Array
+                (
+                    [MerchantRequestID] => 33867-16374312-1
+                    [CheckoutRequestID] => ws_CO_24042023125656089728960173
+                    [ResultCode] => 0
+                    [ResultDesc] => The service request is processed successfully.
+                    [CallbackMetadata] => Array
+                        (
+                            [Item] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Name] => Amount
+                                            [Value] => 5
+                                        )
+
+                                    [1] => Array
+                                        (
+                                            [Name] => MpesaReceiptNumber
+                                            [Value] => RDO0WMEUY8
+                                        )
+
+                                    [2] => Array
+                                        (
+                                            [Name] => Balance
+                                        )
+
+                                    [3] => Array
+                                        (
+                                            [Name] => TransactionDate
+                                            [Value] => 20230424125711
+                                        )
+
+                                    [4] => Array
+                                        (
+                                            [Name] => PhoneNumber
+                                            [Value] => 254728960173
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO0WMEUY8
+    [TransTime] => 20230424125710
+    [TransAmount] => 5.00
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 22695426
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 271.00
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254728960173
+    [FirstName] => CONRADE
+    [MiddleName] => NYATUNDO
+    [LastName] => 
+)
+Array
+(
+    [Body] => Array
+        (
+            [stkCallback] => Array
+                (
+                    [MerchantRequestID] => 7245-17183475-1
+                    [CheckoutRequestID] => ws_CO_24042023125829617728960173
+                    [ResultCode] => 0
+                    [ResultDesc] => The service request is processed successfully.
+                    [CallbackMetadata] => Array
+                        (
+                            [Item] => Array
+                                (
+                                    [0] => Array
+                                        (
+                                            [Name] => Amount
+                                            [Value] => 5
+                                        )
+
+                                    [1] => Array
+                                        (
+                                            [Name] => MpesaReceiptNumber
+                                            [Value] => RDO7WMJW6V
+                                        )
+
+                                    [2] => Array
+                                        (
+                                            [Name] => Balance
+                                        )
+
+                                    [3] => Array
+                                        (
+                                            [Name] => TransactionDate
+                                            [Value] => 20230424125839
+                                        )
+
+                                    [4] => Array
+                                        (
+                                            [Name] => PhoneNumber
+                                            [Value] => 254728960173
+                                        )
+
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO7WMJW6V
+    [TransTime] => 20230424125839
+    [TransAmount] => 5.00
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 0728960173
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 276.00
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254728960173
+    [FirstName] => CONRADE
+    [MiddleName] => NYATUNDO
+    [LastName] => 
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WJGE8Y
+    [TransTime] => 20230424122512
+    [TransAmount] => 5
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 254791876624
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 266
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254791979265
+    [FirstName] => Davies
+    [MiddleName] => Ngwiri
+    [LastName] => Gitau
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WJGD5Y
+    [TransTime] => 20230424122512
+    [TransAmount] => 5
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 0791876624
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 266
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254791979265
+    [FirstName] => Davies
+    [MiddleName] => Ngwiri
+    [LastName] => Gitau
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO2WMZGJI
+    [TransTime] => 20230424130319
+    [TransAmount] => 5.00
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => fgdhj00
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 281.00
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254728960173
+    [FirstName] => CONRADE
+    [MiddleName] => NYATUNDO
+    [LastName] => 
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO8WQ4EFW
+    [TransTime] => 20230424133544
+    [TransAmount] => 5.00
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 22695426
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 286.00
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254728960173
+    [FirstName] => CONRADE
+    [MiddleName] => NYATUNDO
+    [LastName] => 
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO0WSPQKY
+    [TransTime] => 20230424140228
+    [TransAmount] => 100.00
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 0723857040
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 386.00
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254723857040
+    [FirstName] => DOROTHY
+    [MiddleName] => KERUBO
+    [LastName] => SARARA
+)
+Array
+(
+    [TransactionType] => Pay Bill
+    [TransID] => RDO0WY99Z6
+    [TransTime] => 20230424150130
+    [TransAmount] => 20500.00
+    [BusinessShortCode] => 754298
+    [BillRefNumber] => 1328051
+    [InvoiceNumber] => 
+    [OrgAccountBalance] => 20886.00
+    [ThirdPartyTransID] => 
+    [MSISDN] => 254722940962
+    [FirstName] => PAULINA
+    [MiddleName] => CHEMANYUR
+    [LastName] => 
+)
+Array
+(
+    [Body] => Array
+        (
+            [stkCallback] => Array
+                (
+                    [MerchantRequestID] => 83272-29129916-1
+                    [CheckoutRequestID] => ws_CO_09072023185814094728960173
+                    [ResultCode] => 1032
+                    [ResultDesc] => Request cancelled by user
+                )
+
+        )
+
+)
+Array
+(
+    [Body] => Array
+        (
+            [stkCallback] => Array
+                (
+                    [MerchantRequestID] => 70235-229186555-1
+                    [CheckoutRequestID] => ws_CO_09072023190139760728960173
+                    [ResultCode] => 1032
+                    [ResultDesc] => Request cancelled by user
+                )
+
+        )
+
+)
