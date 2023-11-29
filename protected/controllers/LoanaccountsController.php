@@ -509,17 +509,14 @@ class LoanaccountsController extends Controller{
                 $repayment_start_date=$_POST['repayment_start_date'];
                 $penalty_amount=$_POST['penalty_amount'];
                 $reason=$_POST['reason'];
-                $bad_symbols = array(",");
-                //$amountValue = str_replace($bad_symbols,"",$amount);
-                $amountValue = str_replace($bad_symbols,"",$amount);
-                //if($maxLimit < $amountValue){
+                $pay_frequency = $_POST['pay_frequency'];
                 if($maxLimit < $finalApprovedAmount){
                     CommonFunctions::setFlashMessage('danger',"Application cannot be approved since the amount provided exceeds the client loan limit of KES $limitFormatted /=");
                     $this->redirect(array('loanaccounts/viewDetails/'.$loanaccount_id));
                 }else{
                     $authStatus = array('0','10');
                     if(CommonFunctions::searchElementInArray($model->loan_status,$authStatus) === 1){
-                        switch(LoanApplication::approveLoanAccount($loanaccount_id,$amount,$repayment_period,$repayment_start_date,$penalty_amount,$reason,$insuranceAmount,$processingAmount,$deductions,$finalApprovedAmount)){
+                        switch(LoanApplication::approveLoanAccount($loanaccount_id,$amount,$repayment_period,$repayment_start_date,$penalty_amount,$reason,$insuranceAmount,$processingAmount,$deductions,$finalApprovedAmount,$pay_frequency)){
                             case 0:
                                 $type='danger';
                                 $message="Application not approved. Please try again.";

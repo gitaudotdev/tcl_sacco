@@ -26,6 +26,7 @@
  * @property string $repayment_cycle
  * @property integer $repayment_period
  * @property string $repayment_start_date
+ * @property string $pay_frequency
  * @property string $created_at
  * @property integer $created_by
  */
@@ -47,9 +48,9 @@ class Loanaccounts extends CActiveRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id,rm,direct_to, repayment_period, repayment_start_date,interest_rate', 'required'),
+			array('user_id,rm,direct_to, repayment_period, repayment_start_date,interest_rate,pay_mode', 'required'),
 			array('user_id,rm,direct_to,branch_id,forward_to,approved_by,repayment_period,created_by','numerical','integerOnly'=>true),
-			array('account_number, approval_reason,disbursal_reason,special_comment', 'length', 'max'=>512),
+			array('account_number, approval_reason,disbursal_reason,special_comment,pay_mode', 'length', 'max'=>512),
 			array('amount_applied,amount_receivable, amount_approved', 'length', 'max'=>15),
 			array('interest_rate, penalty_amount', 'length', 'max'=>15),
 			array('loan_status, repayment_cycle,loan_type,loan_security,repayment_mode,performance_level,crb_status,account_status', 'length', 'max'=>2),
@@ -106,6 +107,7 @@ class Loanaccounts extends CActiveRecord{
 			'special_comment'=>'Special Comment',
 			'maxLimit'=>'Maximum Loan Limit',
 			'date_restructured'=>'Date Restructured',
+			'pay_mode'=>'Payment Frequency',
 			'created_at' => 'Created At',
 			'created_by' => 'Created By',
 

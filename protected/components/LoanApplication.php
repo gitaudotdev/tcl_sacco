@@ -221,7 +221,7 @@ class LoanApplication{
         return DisbursedLoans::model()->findAllBySql("SELECT * FROM disbursed_loans WHERE loanaccount_id=$loanaccount_id");
     }
 
-    public static function approveLoanAccount($loanaccount_id,$amount,$repayment_period,$repayment_start_date,$penalty_amount,$approval_reason,$insuranceAmount,$processingAmount,$deductions,$finalApprovedAmount){
+    public static function approveLoanAccount($loanaccount_id,$amount,$repayment_period,$repayment_start_date,$penalty_amount,$approval_reason,$insuranceAmount,$processingAmount,$deductions,$finalApprovedAmount,$pay_frequency){
         $loanaccount=LoanApplication::getLoanAccount($loanaccount_id);
         $loanaccount->loan_status='1';
         $loanaccount->date_approved=date('Y-m-d');
@@ -237,6 +237,7 @@ class LoanApplication{
         $loanaccount->insurance_fee       = $insuranceAmount;
         $loanaccount->processing_fee       = $processingAmount;
         $loanaccount->deduction_fee       = $deductions;
+        $loanaccount->pay_frequency       = $pay_frequency;
 
         if($loanaccount->save()){
             $data['loanaccount_id']=$loanaccount->loanaccount_id;

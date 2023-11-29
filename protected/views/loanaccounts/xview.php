@@ -131,46 +131,27 @@ $allowed       = array('2','5','6','7');
                                     <td><?=$model->account_number;?></td>
                                 </tr>
                                 <tr>
+                                    <td>Loan Limit</td>
+                                    <td><?=$model->ClientMaximumAmount;?></td>
+                                </tr>
+                                <tr>
                                     <td>Savings</td>
                                     <td>
                                         <?=CommonFunctions::asMoney(LoanApplication::getUserSavingAccountBalance($model->user_id));?>
                                     </td>
-                                <tr>
-                                    <td><div class="text-wrap">Process Status</div></td>
-                                    <td><div class="text-wrap"><?=$model->getLoanAccountStatus();?></div></td>
-                                </tr>
-
                                 </tr>
                             </table>
                         </div>
                         <div class="col-md-4 col-lg-4 col-sm-12">
                             <table class="table table-bordered table-hover table-responsive">
-                                <tr>
-                                    <td>Loan Limit</td>
-                                    <td><?=$model->ClientMaximumAmount;?></td>
-                                </tr>
-
-                                <tr>
-                                    <td><div class="text-wrap">Amount Approved</div></td>
-                                    <td><div class="text-wrap"><?=strtoupper($model->amount_receivable);?></div></td>
-                                </tr>
 
                                 <tr>
                                     <td><div class="text-wrap">Amount Disbursed</div></td>
                                     <td><div class="text-wrap"><?=CommonFunctions::asMoney(LoanManager::getPrincipalDisbursed($model->loanaccount_id));?></div></td>
                                 </tr>
                                 <tr>
-                                    <td><div class="text-wrap">Interest Rate</div></td>
-                                    <td><div class="text-wrap"><?=round($model->interest_rate);?> % p.m.</div></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="text-wrap">One-off Installment</div></td>
-                                    <td><div class="text-wrap"><?=CommonFunctions::asMoney(LoanApplication::getEMIAmount($model->loanaccount_id));?></div> </td>
-                                </tr>
-
-                                <tr>
-                                    <td><div class="text-wrap">Expected Payments</div></td>
-                                    <td><div class="text-wrap"><?=$model->repayment_period;?> (one)</div></td>
+                                    <td><div class="text-wrap">Repayment Period</div></td>
+                                    <td><div class="text-wrap"><?=$model->repayment_period;?> Months</div></td>
                                 </tr>
 
                                 <tr>
@@ -181,6 +162,14 @@ $allowed       = array('2','5','6','7');
                                 <tr>
                                     <td><div class="text-wrap">Expiry Date</div></td>
                                     <td><div class="text-wrap"><?=date('jS M Y',strtotime($model->repayment_start_date));?></div> </td>
+                                </tr>
+                                <tr>
+                                    <td><div class="text-wrap">Interest Rate</div></td>
+                                    <td><div class="text-wrap"><?=round($model->interest_rate);?> % p.m.</div></td>
+                                </tr>
+                                <tr>
+                                    <td><div class="text-wrap">One-off Installment</div></td>
+                                    <td><div class="text-wrap"><?=CommonFunctions::asMoney(LoanApplication::getEMIAmount($model->loanaccount_id));?></div> </td>
                                 </tr>
                                 <tr>
                                     <td><div class="text-wrap">Penalty Accrued</div></td>
@@ -194,7 +183,15 @@ $allowed       = array('2','5','6','7');
                                         </div>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><div class="text-wrap">Process Status</div></td>
+                                    <td><div class="text-wrap"><?=$model->getLoanAccountStatus();?></div></td>
+                                </tr>
 
+                                <tr>
+                                    <td><div class="text-wrap">Amount Approved</div></td>
+                                    <td><div class="text-wrap"><?=strtoupper($model->amount_receivable);?></div></td>
+                                </tr>
 
                                 <tr>
                                     <td><div class="text-wrap">Days Since Disbursed</div></td>
@@ -272,7 +269,7 @@ $allowed       = array('2','5','6','7');
                                     <td><div class="text-wrap"><?=strtoupper($model->deduction_fee);?></div></td>
                                 </tr>
                                 <tr>
-                                    <td><div class="text-wrap">Disburse(d) Amount</div></td>
+                                    <td><div class="text-wrap">Amount to Disburse</div></td>
                                     <td><div class="text-wrap"><?=strtoupper($model->amount_approved);?></div></td>
                                 </tr>
 

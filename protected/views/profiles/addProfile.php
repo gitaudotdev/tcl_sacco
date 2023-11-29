@@ -155,7 +155,7 @@ $this->breadcrumbs=array(
                                             <option value="SUPERADMIN">SuperAdmin</option>
                                             <option value="ADMIN">Admin</option>
                                             <option value="STAFF">Staff</option>
-                                            <option value="USER">User</option>
+                                            <option value="USER">Member</option>
                                         </select>
                                     </div>
                                 </div>

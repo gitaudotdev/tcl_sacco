@@ -42,8 +42,8 @@
         </FilesMatch>
     </IfModule>
     RewriteEngine on
-RewriteCond %{HTTPS}  !=on
-RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+#RewriteCond %{HTTPS}  !=on
+#RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
     # if a directory or a file exists, use it directly
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d

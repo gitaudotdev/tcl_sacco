@@ -158,11 +158,11 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                                 <td><div class="text-wrap"><?=CommonFunctions::asMoney(LoanManager::getPrincipalDisbursed($model->loanaccount_id));?></div></td>
                             </tr>
                             <tr>
-                                <td><div class="text-wrap">Expected Payments</div></td>
-                                <td><div class="text-wrap"><?=$model->repayment_period;?> (One)</div></td>
+                                <td><div class="text-wrap">Repayment Period</div></td>
+                                <td><div class="text-wrap"><?=$model->repayment_period;?> Months</div></td>
                             </tr>
                             <tr>
-                                <td><div class="text-wrap">Last Repayment Date</div></td>
+                                <td><div class="text-wrap">First Repayment Date</div></td>
                                 <td><div class="text-wrap"><?=date('jS M Y',strtotime($model->repayment_start_date));?></div> </td>
                             </tr>
                             <tr>
@@ -541,7 +541,7 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                     <div class="row">
                         <div class="col-md-8 col-lg-8 col-sm-12">
                             <div class="form-group">
-                                <label>Expected Payments</label>
+                                <label>Repayment Period</label>
                                 <input type="text" class="form-control" required="required" value="<?=$model->repayment_period;?>" name="repayment_period" readonly="readonly">
                             </div>
                         </div>
@@ -619,7 +619,7 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                             <div class='file-input'>
                                 <input type='file' name="loan_file" required="required">
                                 <span class='button'>Choose File</span>
-                                <span class='label' data-js-label>No file selected</span>
+                                <span class='label' data-js-label>No file selected</label>
                             </div>
                         </div>
                     </div>
