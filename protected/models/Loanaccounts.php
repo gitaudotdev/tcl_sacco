@@ -48,8 +48,8 @@ class Loanaccounts extends CActiveRecord{
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('user_id,rm,direct_to, repayment_period, repayment_start_date,interest_rate,pay_mode', 'required'),
-			array('user_id,rm,direct_to,branch_id,forward_to,approved_by,repayment_period,created_by','numerical','integerOnly'=>true),
+			array('user_id,rm,direct_to, repayment_period, repayment_start_date,interest_rate', 'required'),
+			array('user_id,rm,direct_to,branch_id,forward_to,approved_by,repayment_period,repayments_count,created_by','numerical','integerOnly'=>true),
 			array('account_number, approval_reason,disbursal_reason,special_comment,pay_mode', 'length', 'max'=>512),
 			array('amount_applied,amount_receivable, amount_approved', 'length', 'max'=>15),
 			array('interest_rate, penalty_amount', 'length', 'max'=>15),
@@ -57,7 +57,7 @@ class Loanaccounts extends CActiveRecord{
 			array('date_approved,date_restructured,created_at,repayment_start_date', 'safe'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('loanaccount_id, approval_reason,disbursal_reason, user_id,branch_id, account_number, amount_applied,amount_receivable, interest_rate, rm, loan_status, penalty_amount, direct_to, forward_to, date_approved, amount_approved, approved_by,performance_level,repayment_cycle,special_comment,repayment_period,repayment_start_date,date_restructured,created_at,created_by,startDate,endDate,branch,repayment_mode,loan_security,loan_type,loan_security_details,is_frozen,account_status,maxLimit,insurance_fee ,processing_fee,deduction_fee,insurance_fee_value ,processing_fee_value,member_type', 'safe', 'on'=>'search'),
+			array('loanaccount_id, approval_reason,disbursal_reason, user_id,branch_id, account_number, amount_applied,amount_receivable, interest_rate, rm, loan_status, penalty_amount, direct_to, forward_to, date_approved, amount_approved, approved_by,performance_level,repayment_cycle,special_comment,repayment_period,repayment_start_date,date_restructured,repayments_count,created_at,created_by,startDate,endDate,branch,repayment_mode,loan_security,loan_type,loan_security_details,is_frozen,account_status,maxLimit,insurance_fee ,processing_fee,deduction_fee,insurance_fee_value ,processing_fee_value,member_type', 'safe', 'on'=>'search'),
 		);
 	}
 	/**
@@ -102,6 +102,7 @@ class Loanaccounts extends CActiveRecord{
 			'repayment_cycle' => 'Repayment Cycle',
 			'repayment_period' => 'Repayment Period',
 			'repayment_start_date' => 'Repayment Start Date',
+			'repayments_count' => 'Expected Repayments',
 			'approval_reason' => 'Reason to Approve',
 			'disbursal_reason' => 'Reason to Disburse',
 			'special_comment'=>'Special Comment',
@@ -151,6 +152,7 @@ class Loanaccounts extends CActiveRecord{
 		$criteria->compare("$alias.performance_level",$this->performance_level,true);
 		$criteria->compare("$alias.crb_status",$this->crb_status,true);
 		$criteria->compare('penalty_amount',$this->penalty_amount,true);
+		$criteria->compare('repayments_count',$this->repayments_count,true);
 		$criteria->compare('direct_to',$this->direct_to);
 		$criteria->compare('forward_to',$this->forward_to);
 		$criteria->compare('date_approved',$this->date_approved,true);
@@ -1069,6 +1071,20 @@ class Loanaccounts extends CActiveRecord{
 		}else{
 			$view_action="";
 		}
+        /*******
+         * Freeze Penalty
+         */
+        if(Navigation::checkIfAuthorized(51) == 1) {
+            $arrayStatus = array('0', '1', '3', '4', '8', '9', '10');
+            if (CommonFunctions::searchElementInArray($loanStatus, $arrayStatus) == 0) {
+                $penalty_action = "<a href='#' class='btn btn-primary btn-sm' onclick='Authenticate(\"" . Yii::app()->createUrl('loanaccounts/freeze_penalty/' . $this->loanaccount_id) . "\")' title='Freeze Penalty'><i class='fa fa-adjust'></i></a>";
+            } else {
+                $penalty_action = "";
+            }
+        }else{
+            $penalty_action = "";
+        }
+
 		/*******
 		 DELETE LOAN
 		***************/
@@ -1208,13 +1224,13 @@ class Loanaccounts extends CActiveRecord{
 		$authOnly = array('10');
 		switch(CommonFunctions::searchElementInArray($loanStatus,$authOnly)){
 			case 0:
-			$accounts_actions="$view_action&nbsp;$details_action&nbsp;$update_action
+			$accounts_actions="$view_action&nbsp;$details_action&nbsp;$update_action&nbsp;$penalty_action
 			&nbsp;$resubmit_action&nbsp;$recall_action&nbsp;$return_action
 			&nbsp;$disburse_action&nbsp;$topup_action&nbsp;$delete_action&nbsp;$freeze_action";
 			break;
 
 			case 1:
-			$accounts_actions="$details_action&nbsp;$update_action
+			$accounts_actions="$details_action&nbsp;$update_action&nbsp;$penalty_action
 			&nbsp;$delete_action";
 			break;
 		}

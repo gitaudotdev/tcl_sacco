@@ -25,7 +25,8 @@ class LoanApplication{
                 $insuranceValueRate  = $data['insurance_fee_value'];
                 $processingValueRate  = $data['processing_fee_value'];
 
-                $freezingPeriod = $data['freezing_period'];
+                $loanPeriod = $data['repayment_period'];
+                $repaymentFrequency = $data['repayment_frequency'];
 
                 if($amountValue <= $loanLimit){
                     $loanaccount  = new Loanaccounts;
@@ -45,14 +46,16 @@ class LoanApplication{
 
 
                     $loanaccount->repayment_cycle      = Yii::app()->params['DEFAULTREPAYMENTCYCLE'];
-                    $loanaccount->repayment_period     = Yii::app()->params['DEFAULTREPAYMENTPERIOD'];
-                    if ($freezingPeriod > 0) {
-                       $newDate = date('Y-m-d', strtotime("+".$freezingPeriod." days"));
-                       $loanaccount->repayment_start_date = $newDate;
+                    $loanaccount->repayment_period     = $loanPeriod != null ? $loanPeriod : Yii::app()->params['DEFAULTREPAYMENTPERIOD'];
+                    if ($loanPeriod > 0) {
+                        $newDate = date('Y-m-d', strtotime("+".$loanPeriod." days"));
+                        $loanaccount->repayment_start_date = $newDate;
                     } else {
                         $loanaccount->repayment_start_date = Yii::app()->params['DEFAULTREPAYMENTSTARTDATE'];
                     }
-                    $loanaccount->freezing_period        = $freezingPeriod;
+                    $loanaccount->repayments_count = self::calculateRepaymentCycle($loanPeriod, $repaymentFrequency);
+                    $loanaccount->freezing_period      = $loanPeriod;
+                    $loanaccount->pay_mode      = $repaymentFrequency;
                     $loanaccount->rm                   = $profile->managerId;
                     $loanaccount->branch_id            = $profile->branchId;
                     $loanaccount->direct_to            = $data['direct_to'];
@@ -99,8 +102,8 @@ class LoanApplication{
                             $filePath = $data['filesPath'];
                             LoanApplication::uploadApplicationSupportFiles($filePath,$loanaccount);
                         }
-                        if($freezingPeriod > 0){
-                            LoanManager::freezeInterestAccrual($loanaccount->loanaccount_id,$freezingPeriod,"Loan Application");
+                        if($loanPeriod > 0){
+                            LoanManager::freezeInterestAccrual($loanaccount->loanaccount_id,$loanPeriod,"Loan Application");
                         }
 
                         $status = 1;
@@ -113,6 +116,30 @@ class LoanApplication{
                 return $status;
                 break;
         }
+    }
+
+    public static function calculateRepaymentCycle($loanPeriod, $repaymentFrequency) {
+        $repaymentCycle = 0;
+
+        switch($repaymentFrequency){
+            case 'daily':
+                $repaymentCycle = $loanPeriod;
+                break;
+            case 'weekly':
+                $repaymentCycle = ceil($loanPeriod / 7);
+                break;
+            case 'bi-weekly':
+                $repaymentCycle = ceil($loanPeriod / 14);
+                break;
+            case 'monthly':
+                $repaymentCycle = ceil($loanPeriod / 30);
+                break;
+            case 'quarterly':
+                $repaymentCycle = ceil($loanPeriod / 90);
+                break;
+        }
+
+        return $repaymentCycle;
     }
 
     public static function uploadApplicationSupportFiles($filesPath,$model){
@@ -237,7 +264,7 @@ class LoanApplication{
         $loanaccount->insurance_fee       = $insuranceAmount;
         $loanaccount->processing_fee       = $processingAmount;
         $loanaccount->deduction_fee       = $deductions;
-        $loanaccount->pay_frequency       = $pay_frequency;
+        $loanaccount->pay_mode       = $pay_frequency;
 
         if($loanaccount->save()){
             $data['loanaccount_id']=$loanaccount->loanaccount_id;
@@ -303,7 +330,7 @@ class LoanApplication{
         return $status;
     }
 
-    public static function disburseLoanApplication($loanaccount_id,$amount,$disbursal_reason,$amountSentToClient,$insuranceFee,$processingFee){
+    public static function disburseLoanApplication($loanaccount_id,$amount,$disbursal_reason,$amountSentToClient,$insuranceFee,$processingFee,$payFrequency){
 
         $loanaccount=LoanApplication::getLoanAccount($loanaccount_id);
         switch(LoanApplication::restrictDoubleDisbursement($loanaccount_id)){
@@ -328,6 +355,7 @@ class LoanApplication{
                     case 1:
                         $loanaccount->loan_status='2';
                         $loanaccount->disbursal_reason=$disbursal_reason;
+                        $loanaccount->pay_frequency = $payFrequency;
                         $loanaccount->save();
                         $disburse=new DisbursedLoans;
                         $disburse->loanaccount_id=$loanaccount_id;
@@ -336,15 +364,22 @@ class LoanApplication{
                         $disburse->disbursed_at = date('Y-m-d H:i:s');
                         if($disburse->save()){
                             //calculate interest payable for days frozen
-                            $freezingPeriod = $loanaccount->freezing_period;
-                            if($freezingPeriod > 0){
-                                $interestRate = $loanaccount->interest_rate;
-                                $interestPayable      = LoanManager::getInterestAmount($interestRate,$freezingPeriod,$loanaccount->amount_applied);
-                                $bad_symbols = array(",");
-                                $interestPayable =  str_replace($bad_symbols,"",$interestPayable);
-                                if($interestPayable > 0){
-                                    LoanManager::recordAccruedInterest($loanaccount->loanaccount_id,$interestPayable,'debit','0');
-                                }
+//                            $freezingPeriod = $loanaccount->freezing_period;
+//                            if($freezingPeriod > 0){
+//                                $interestRate = $loanaccount->interest_rate;
+//                                $interestPayable      = LoanManager::getInterestAmount($interestRate,$freezingPeriod,$loanaccount->amount_applied);
+//                                $bad_symbols = array(",");
+//                                $interestPayable =  str_replace($bad_symbols,"",$interestPayable);
+//                                if($interestPayable > 0){
+//                                    LoanManager::recordAccruedInterest($loanaccount->loanaccount_id,$interestPayable,'debit','0');
+//                                }
+//                            }
+
+                            //calculate total loan interest and record Accrued Interest
+                            $interestRate = $loanaccount->interest_rate;
+                            $loanInterest = LoanManager::getTotalLoanInterestAmount($interestRate,$loanaccount->amount_applied);
+                            if($loanInterest > 0){
+                                LoanManager::recordAccruedInterest($loanaccount->loanaccount_id,$loanInterest,'debit','0');
                             }
 
 

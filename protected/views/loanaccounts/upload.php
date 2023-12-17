@@ -1,7 +1,7 @@
 <?php
-$this->pageTitle=Yii::app()->name . ' - Microfinance : Upload Members';
+$this->pageTitle=Yii::app()->name . ' - Microfinance : Upload Loan Accounts';
 $this->breadcrumbs=array(
-	'Settings'=>array('dashboard/admin'),
+	'LoanAccounts'=>array('loanaccounts/admin'),
 	'Upload'=>array('upload'),
 );
 /**Flash Messages**/
@@ -46,7 +46,7 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
         <div class="card-body">
         	<div class="col-md-12 col-lg-12 col-sm-12">
                <h3 class="title">Please Upload a CSV file</h3>
-               <div style="color:red !important;margin-top: -2% !important;">
+               <div style="color:red !important;">
                   <strong>NB: </strong><span>Kindly ensure you rename the file and save it as a CSV file. <br>
                   </span>
                </div>

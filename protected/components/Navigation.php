@@ -449,7 +449,7 @@ class Navigation{
             </li>';
 		}
         
-        if(Navigation::checkIfAuthorized(125) == 1){
+        if(Navigation::checkIfAuthorized(310) == 1){
 			$menu.='<li>
                 <a href="'.Yii::app()->createUrl('penalties/admin').'">
                     <i class="now-ui-icons business_chart-bar-32"></i>

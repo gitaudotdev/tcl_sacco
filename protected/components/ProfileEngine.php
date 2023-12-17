@@ -112,7 +112,20 @@ class ProfileEngine {
     }
 
     public static function getLoanDirectionProfiles(){
-        $directQuery = "SELECT * FROM profiles WHERE id IN(SELECT profileId FROM auths WHERE level IN('SUPERADMIN','ADMIN'))";
+        $userLevel = Yii::app()->user->user_level;
+        $directQuery = "";
+
+        switch($userLevel){
+            case '0':
+                $directQuery = "SELECT * FROM profiles WHERE id IN(SELECT profileId FROM auths WHERE level IN('SUPERADMIN', 'ADMIN'))";
+                break;
+            case '1':
+            case '2':
+                $directQuery = "SELECT * FROM profiles WHERE id IN(SELECT profileId FROM auths WHERE level IN('ADMIN'))";
+                break;
+            default:
+                throw new Exception("Invalid user level: $userLevel");
+        }
         return Profiles::model()->findAllBySql($directQuery);
     }
 

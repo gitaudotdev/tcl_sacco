@@ -159,7 +159,7 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                             </tr>
                             <tr>
                                 <td><div class="text-wrap">Expected Payments</div></td>
-                                <td><div class="text-wrap"><?=$model->repayment_period;?> (One)</div></td>
+                                <td><div class="text-wrap"><?=$model->repayment_period;?> </div></td>
                             </tr>
                             <tr>
                                 <td><div class="text-wrap">Last Repayment Date</div></td>
@@ -288,21 +288,24 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                             </tr>
 
                             <tr>
+                                <td><div class="text-wrap">Daily Penalty</div></td>
+                                <td><div class="text-wrap"><?=CommonFunctions::asMoney($model->penalty_amount);?></div></td>
+                            </tr>
+                            <tr>
+                                <td>Installments Amount</td>
+                                <td><?=CommonFunctions::asMoney(LoanCalculator::getEMIAmount($model->amount_applied,$model->interest_rate,$model->repayment_period));?> </td>
+                            </tr>
+                            <tr>
+                                <td>Payment Model</td>
+                                <td><?=$model->pay_mode ? $model->pay_mode : 'monthly';?> </td>
+                            </tr>
+                            <tr>
                                 <td><div class="text-wrap">Client To Receive</div></td>
                                 <td><div class="text-wrap"><?=CommonFunctions::asMoney($model->amount_approved);?></div></td>
                             </tr>
                         </table>
                     </div>
-
-
-
-
-
                 </div>
-
-
-
-
 
                 <div class="col-md-12 col-lg-12 col-sm-12">
                     <br>
@@ -539,17 +542,26 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                         </div>
                     </div>
                     <div class="row">
+                        <?php
+                        $firstOption = $model->pay_mode
+                        ?>
                         <div class="col-md-8 col-lg-8 col-sm-12">
                             <div class="form-group">
-                                <label>Expected Payments</label>
-                                <input type="text" class="form-control" required="required" value="<?=$model->repayment_period;?>" name="repayment_period" readonly="readonly">
+                                <label>Payment Model</label>
+                                <select class="form-control selectpicker" name="pay_frequency" id="pay_frequency">
+                                    <option value="<?= $firstOption ?>"><?= ucfirst($firstOption) ?></option>
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="biweekly">Biweekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-8 col-lg-8 col-sm-12">
                             <div class="form-group">
-                                <label>Repayment Date</label>
+                                <label>Repayment Start Date</label>
                                 <input type="text" class="form-control" required="required" value="<?=$model->repayment_start_date;?>" name="repayment_start_date" id="normaldatepicker" readonly="readonly" disabled="disabled">
                             </div>
                         </div>

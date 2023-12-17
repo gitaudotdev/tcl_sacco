@@ -20,137 +20,160 @@
     <?=$form->errorSummary($model); ?>
     <br>
     <div class="row">
-<!--        <div class="col-md-3 col-lg-3 col-sm-12">-->
-<!--            <div class="form-group">-->
-<!--                <label >Member TYPE</label>-->
-<!--                <select class="form-control selectpicker" name="type" id="member_type">-->
-<!--                    <option value="salaried">SALARIED</option>-->
-<!--                    <option value="business">BUSINESS</option>-->
-<!--                </select>-->
-<!--            </div>-->
-<!--        </div>-->
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label >Member</label>
-            <?php if($model->isNewRecord):?>
-                <?=$form->dropDownList($model,'user_id',$model->getBorrowerList(),array('prompt'=>'-- MEMBERS --','class'=>'selectpicker form-control-changed','required'=>'required','id'=>'userID')); ?>
-                <?=$form->error($model,'user_id'); ?>
-            <?php endif;?>
-            <?php if(!($model->isNewRecord)):?>
-                <?=$form->dropDownList($model,'user_id',$model->getBorrowerList(),array('prompt'=>'-- MEMBERS --','class'=>'selectpicker form-control-changed','disabled'=>'disabled','id'=>'userID')); ?>
-                <?=$form->error($model,'user_id'); ?>
-            <?php endif;?>
+        <!--        <div class="col-md-3 col-lg-3 col-sm-12">-->
+        <!--            <div class="form-group">-->
+        <!--                <label >Member TYPE</label>-->
+        <!--                <select class="form-control selectpicker" name="type" id="member_type">-->
+        <!--                    <option value="salaried">SALARIED</option>-->
+        <!--                    <option value="business">BUSINESS</option>-->
+        <!--                </select>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label >Member</label>
+                <?php if($model->isNewRecord):?>
+                    <?=$form->dropDownList($model,'user_id',$model->getBorrowerList(),array('prompt'=>'-- MEMBERS --','class'=>'selectpicker form-control-changed','required'=>'required','id'=>'userID')); ?>
+                    <?=$form->error($model,'user_id'); ?>
+                <?php endif;?>
+                <?php if(!($model->isNewRecord)):?>
+                    <?=$form->dropDownList($model,'user_id',$model->getBorrowerList(),array('prompt'=>'-- MEMBERS --','class'=>'selectpicker form-control-changed','disabled'=>'disabled','id'=>'userID')); ?>
+                    <?=$form->error($model,'user_id'); ?>
+                <?php endif;?>
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label>Account Number</label>
+                <?=$form->textField($model,'account_number',array('required'=>'required','maxlength'=>15,'class'=>'form-control','placeholder'=>'Loan Account Number','id'=>'accountNumber')); ?>
+                <?=$form->error($model,'account_number'); ?>
+            </div>
         </div>
     </div>
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label>Account Number</label>
-            <?=$form->textField($model,'account_number',array('required'=>'required','maxlength'=>15,'class'=>'form-control','placeholder'=>'Loan Account Number','id'=>'accountNumber')); ?>
-            <?=$form->error($model,'account_number'); ?>
-        </div>
-    </div>
-</div>
 
-<br>
+    <br>
 
-<div class="row">
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label >Client Employer</label>
-            <?=$form->textField($model,'user_employer',array('required'=>'required','maxlength'=>15,'class'=>'form-control','placeholder'=>'Employer','readonly'=>'readonly','id'=>'userEmployer')); ?>
+    <div class="row">
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label >Client Employer</label>
+                <?=$form->textField($model,'user_employer',array('required'=>'required','maxlength'=>15,'class'=>'form-control','placeholder'=>'Employer','readonly'=>'readonly','id'=>'userEmployer')); ?>
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label >Saving Account Balance</label>
+                <?=$form->textField($model,'saving_balance',array('required'=>'required','maxlength'=>15,'class'=>'form-control','placeholder'=>'Current Balance','readonly'=>'readonly','id'=>'savingBalance')); ?>
+            </div>
         </div>
     </div>
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label >Saving Account Balance</label>
-            <?=$form->textField($model,'saving_balance',array('required'=>'required','maxlength'=>15,'class'=>'form-control','placeholder'=>'Current Balance','readonly'=>'readonly','id'=>'savingBalance')); ?>
-        </div>
-    </div>
-</div>
 
-<br>
+    <br>
 
-<div class="row">
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label >Loan Limit</label>
-            <?=$form->textField($model,'maxLimit',array('readonly'=>'readonly','maxlength'=>15,'class'=>'form-control','placeholder'=>'Amount Applied Digits Only', 'id'=>'maxLimit')); ?>
-            <?=$form->error($model,'maxLimit'); ?>
+    <div class="row">
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label >Loan Limit</label>
+                <?=$form->textField($model,'maxLimit',array('readonly'=>'readonly','maxlength'=>15,'class'=>'form-control','placeholder'=>'Amount Applied Digits Only', 'id'=>'maxLimit')); ?>
+                <?=$form->error($model,'maxLimit'); ?>
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label >Interest Rate</label>
+                <?=$form->textField($model,'interest_rate',array('readonly'=>'readonly','maxlength'=>15,'class'=>'form-control','placeholder'=>'Interest Rate','id'=>'interestRate')); ?>
+                <?=$form->error($model,'interest_rate'); ?>
+                <small class="error" id="interestRateError"></small>
+            </div>
         </div>
     </div>
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label >Interest Rate</label>
-            <?=$form->textField($model,'interest_rate',array('readonly'=>'readonly','maxlength'=>15,'class'=>'form-control','placeholder'=>'Interest Rate','id'=>'interestRate')); ?>
-            <?=$form->error($model,'interest_rate'); ?>
-            <small class="error" id="interestRateError"></small>
-        </div>
-    </div>
-</div>
 
-<br>
+    <br>
 
-<div class="row">
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label >Processing Rate</label>
-            <?=$form->textField($model,'processingRate',array('readonly'=>'readonly','maxlength'=>15,'class'=>'form-control','placeholder'=>'Processing percentage Rate', 'id'=>'processingRate')); ?>
-            <?=$form->error($model,'processingRate'); ?>
+    <div class="row">
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label >Processing Rate</label>
+                <?=$form->textField($model,'processingRate',array('readonly'=>'readonly','maxlength'=>15,'class'=>'form-control','placeholder'=>'Processing percentage Rate', 'id'=>'processingRate')); ?>
+                <?=$form->error($model,'processingRate'); ?>
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label >Insurance Rate</label>
+                <?=$form->textField($model,'insuranceRate',array('readonly'=>'readonly','maxlength'=>15,'class'=>'form-control','placeholder'=>'Insurance Percentage Rate','id'=>'insuranceRate')); ?>
+                <?=$form->error($model,'insuranceRate'); ?>
+                <small class="error" id="insuranceRateRateError"></small>
+            </div>
         </div>
     </div>
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label >Insurance Rate</label>
-            <?=$form->textField($model,'insuranceRate',array('readonly'=>'readonly','maxlength'=>15,'class'=>'form-control','placeholder'=>'Insurance Percentage Rate','id'=>'insuranceRate')); ?>
-            <?=$form->error($model,'insuranceRate'); ?>
-            <small class="error" id="insuranceRateRateError"></small>
-        </div>
-    </div>
-</div>
 
-<br>
+    <br>
 
-<div class="row">
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label >Amount Applied</label>
-            <?=$form->textField($model,'amount_applied',array('required'=>'required','maxlength'=>15,'class'=>'form-control','placeholder'=>'Amount Applied Digits Only','id'=>'amountApplied')); ?>
-            <?=$form->error($model,'amount_applied'); ?>
-            <small class="error" id="amountAppliedError"></small>
+    <div class="row">
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label >Amount Applied</label>
+                <?=$form->textField($model,'amount_applied',array('required'=>'required','maxlength'=>15,'class'=>'form-control','placeholder'=>'Amount Applied Digits Only','id'=>'amountApplied')); ?>
+                <?=$form->error($model,'amount_applied'); ?>
+                <small class="error" id="amountAppliedError"></small>
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label>Direct Loan To</label>
+                <?=$form->dropDownList($model,'direct_to',$model->getDirectedToList(),array('prompt'=>'-- STAFF MEMBERS --','class'=>'selectpicker form-control-changed','required'=>'required')); ?>
+                <?=$form->error($model,'direct_to'); ?>
+            </div>
         </div>
     </div>
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label>Direct Loan To</label>
-            <?=$form->dropDownList($model,'direct_to',$model->getDirectedToList(),array('prompt'=>'-- STAFF MEMBERS --','class'=>'selectpicker form-control-changed','required'=>'required')); ?>
-            <?=$form->error($model,'direct_to'); ?>
+    <div class="row">
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label>Loan Period</label>
+                <select class="form-control selectpicker" name="repayment_period">
+                    <option value="1">One Day</option>
+                    <option value="7">One Week</option>
+                    <option value="14">Two Weeks</option>
+                    <option value="21">Three Weeks</option>
+                    <option value="30">One Month</option>
+                    <option value="60">Two Months</option>
+                    <option value="90">Three Months</option>
+                    <option value="120">Four Months</option>
+                    <option value="150">Five Months</option>
+                    <option value="180">Six Months</option>
+                    <option value="210">Seven Months</option>
+                    <option value="240">Eight Months</option>
+                    <option value="270">Nine Months</option>
+                    <option value="300">Ten Months</option>
+                    <option value="330">Eleven Months</option>
+                    <option value="365">Twelve Months</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label >Expiry Date</label>
+                <input class="form-control" name="expiryDate" readonly  id="expiry_date"  value="<?php echo date('d-m-Y'); ?>"/>
+            </div>
         </div>
     </div>
-</div>
 
-<br>
-<div class="row">
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label>Freeze Period</label>
-            <select class="form-control selectpicker" name="freezing_period">
-                <option value="0">Immediately</option>
-                <option value="7">One Week</option>
-                <option value="14">Two Weeks</option>
-                <option value="21">Three Weeks</option>
-                <option value="30">One Month</option>
-                <option value="60">Two Months</option>
-                <option value="90">Three Months</option>
-            </select>
+    <br>
+    <div class="row">
+        <div class="col-md-3 col-lg-3 col-sm-12">
+            <div class="form-group">
+                <label>Repayment Frequency</label>
+                <select class="form-control selectpicker" name="repayment_frequency">
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="bi-weekly">Biweekly</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="quarterly">Quarterly</option>
+                </select>
+            </div>
         </div>
     </div>
-    <div class="col-md-3 col-lg-3 col-sm-12">
-        <div class="form-group">
-            <label >Expiry Date</label>
-            <input class="form-control" name="expiryDate" readonly  id="expiry_date"  value="<?php echo date('d-m-Y'); ?>"/>
-        </div>
-    </div>
-</div>
 </div>
 <br>
 <div class="row">
@@ -275,9 +298,9 @@
         });
     });
 
-    //when freez period is changed calculate expiry date
+    //when loan period is changed calculate expiry date
     $(function(){
-        $('select[name="freezing_period"]').on('change', function() {
+        $('select[name="repayment_period"]').on('change', function() {
             var days = this.value;
             var date = new Date();
             var newdate = new Date(date);
@@ -398,7 +421,7 @@
             $("#durationMonthsError").text("Please enter digits only. No commas/ full stops");
         }
     });
-    
+
     //member_type change, change borrower list
     $("#member_type").on('change', function () {
         var member_type = $("#member_type").val();

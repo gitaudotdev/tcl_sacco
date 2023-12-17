@@ -147,8 +147,9 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                                 </tr>
                                 <tr>
                                     <td>Expected Payments</td>
-                                    <td><?=$model->repayment_period;?> (One)</td>
+                                    <td><?=$model->repayment_period;?></td>
                                 </tr>
+
                                 <tr>
                                     <td>Interest Rate</td>
                                     <td><?=$model->interest_rate;?> % p.m.</td>
@@ -157,20 +158,13 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                                     <td>Installment</td>
                                     <td><?=CommonFunctions::asMoney(LoanCalculator::getEMIAmount($model->amount_applied,$model->interest_rate,$model->repayment_period));?> </td>
                                 </tr>
+
                             </table>
                         </div>
 
 
                         <div class="col-md-4 col-lg-4 col-sm-12">
                             <table class="table table-bordered table-hover">
-                                <!--                              <tr>-->
-                                <!--                                  <td>Insurance Fee</td>-->
-                                <!--                                  <td>--><?php //=CommonFunctions::asMoney($model->insurance_fee);?><!--</td>-->
-                                <!--                              </tr>-->
-                                <!--                              <tr>-->
-                                <!--                                  <td>Processing Fee</td>-->
-                                <!--                                  <td>--><?php //=CommonFunctions::asMoney($model->processing_fee);?><!--</td>-->
-                                <!--                              </tr>-->
                                 <tr>
                                     <td>Insurance value</td>
                                     <td><?=CommonFunctions::asMoney($model->insurance_fee_value);?> %</td>
@@ -179,10 +173,14 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                                     <td>Processing Value</td>
                                     <td><?=CommonFunctions::asMoney($model->processing_fee_value);?> %</td>
                                 </tr>
-                                <!--                              <tr>-->
-                                <!--                                  <td>Total Deductions</td>-->
-                                <!--                                  <td>--><?php //=CommonFunctions::asMoney($model->deduction_fee);?><!--</td>-->
-                                <!--                              </tr>-->
+                                <tr>
+                                    <td>Repayment Frequency</td>
+                                    <td><?=$model->pay_mode ? $model->pay_mode : 'monthly';?> </td>
+                                </tr>
+                                <tr>
+                                    <td>Repayment Start Date</td>
+                                    <td><?=$model->repayment_start_date;?></td>
+                                </tr>
 
                             </table>
                         </div>
@@ -472,31 +470,13 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                         </div>
                     </div>
 
-                    <!--               <div class="row">-->
-                    <!--                      <div class="col-md-12 col-lg-12 col-sm-12">-->
-                    <!--                          <div class="form-group">-->
-                    <!--                              <label>Total Deduction(Insurance + Processing) on Applied Amount</label>-->
-                    <!--                              <input type="text" class="form-control" readonly value="--><?php //=$model->deduction_fee;?><!--" name="deduction_fee" id="deduction_fee">-->
-                    <!--                          </div>-->
-                    <!--                      </div>-->
-                    <!--               </div>-->
 
-
-
-                    <!--                  <div class="row">-->
-                    <!--                      <div class="col-md-12 col-lg-12 col-sm-12">-->
-                    <!--                          <div class="form-group">-->
-                    <!--                              <label>Loan To be Approved(Amount Applied - Total Deductions)</label>-->
-                    <!--                              <input type="text" class="form-control" readonly value="--><?php //=$model->amount_receivable;?><!--" name="amount_receivable" id="amount_receivable">-->
-                    <!--                          </div>-->
-                    <!--                      </div>-->
-                    <!--                  </div>-->
 
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <div class="form-group">
                                 <label>Expected Payments</label>
-                                <input type="text" class="form-control" required="required" value="<?=$model->repayment_period;?>" name="repayment_period">
+                                <input type="text" class="form-control" required="required" value="<?=$model->repayments_count;?>" name="repayment_period">
                             </div>
                         </div>
                     </div>
@@ -504,7 +484,7 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <div class="form-group">
-                                <label>Repayment Expiry Date</label>
+                                <label>Repayment Start Date</label>
                                 <input type="text" class="form-control" required="required" value="<?=$model->repayment_start_date;?>" name="repayment_start_date" id="normaldatepicker">
                             </div>
                         </div>
@@ -513,7 +493,7 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <div class="form-group">
                                 <label>Payment Method</label>
-                                <select name="pay_frequency" id="pay_frequency">
+                                <select class="form-control selectpicker" name="pay_frequency" id="pay_frequency">
                                     <option value="daily">Daily</option>
                                     <option value="weekly">Weekly</option>
                                     <option value="biweekly">Biweekly</option>

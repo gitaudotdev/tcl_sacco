@@ -42,7 +42,7 @@ class PenaltiesController extends Controller
      */
     public function actionAdmin()
     {
-        switch (Navigation::checkIfAuthorized(197)) {
+        switch (Navigation::checkIfAuthorized(310)) {
             case 0:
                 CommonFunctions::setFlashMessage('danger', "Not Authorized to view write offs Report.");
                 $this->redirect(Yii::app()->request->urlReferrer);

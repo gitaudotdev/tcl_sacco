@@ -73,6 +73,15 @@ class LoanManager{
         return round($interest);
     }
 
+    public static function getTotalLoanInterestAmount($interest_rate,$amount_applied)
+    {
+        $principal = $amount_applied;
+        $percentInterest = $interest_rate / 100;
+
+        $interest = $principal * $percentInterest;
+        return round($interest);
+    }
+
     /*********************************************
     Loan Account Accrued Interest
      *************************************************/
@@ -200,6 +209,75 @@ class LoanManager{
         $penalty->penalty_amount=$penaltyAmount;
         $penalty->created_at = date('Y-m-d H:i:s');
         $penalty->save();
+    }
+
+    public static function freezePenaltyAccrual($accountID,$period,$reason){
+        $loanaccount=Loanaccounts::model()->findByPk($accountID);
+        switch(LoanManager::checkIfAccountAlreadyFrozen($accountID)) {
+            case 0:
+                if (LoanManager::freezeLoanAccount($accountID) === 1) {
+                    $penalty = new PenaltyFreezes;
+                    $penalty->loanaccount_id = $accountID;
+                    $penalty->branch_id = $loanaccount->branch_id;
+                    $penalty->user_id = $loanaccount->user_id;
+                    $penalty->rm = $loanaccount->rm;
+                    $penalty->date_frozen = date('Y-m-d H:i:s');
+                    $penalty->period_frozen = $period;
+                    $penalty->freezing_reason = $reason;
+                    $penalty->frozen_by = Yii::app()->user->user_id;
+                    $penalty->created_by = Yii::app()->user->user_id;
+                    $penalty->created_at = date('Y-m-d H:i:s');
+                    if ($penalty->save()) {
+                        $data['loanaccount_id'] = $accountID;
+                        $data['comment'] = $reason;
+                        $data['activity'] = "Freezing Penalty Accrual";
+                        $data['commented_by'] = Yii::app()->user->user_id;
+                        LoanApplication::recordLoanComment($data);
+                        if ($period === 575) {
+                            $periodRecordable = 'Indefinite';
+                            $expiryMessage = "indefinitely";
+                        } else {
+                            $currentDate = date('Y-m-d');
+                            $periodRecordable = $period . ' days';
+                            $expiryDate = date("d/m/Y", strtotime($currentDate . "+ $period days"));
+                            $expiryMessage = "for $periodRecordable, Expiry $expiryDate";
+                        }
+                        $accountNumber = $loanaccount->account_number;
+                        $fullName = $loanaccount->BorrowerFullName;
+                        Logger::logUserActivity("Froze Accruing Penalty, Account: $accountNumber, period: $periodRecordable, Client: $fullName", 'urgent');
+                        $amountBalance = CommonFunctions::asMoney(LoanManager::getActualLoanBalance($accountID));
+                        $profile = Profiles::model()->findByPk($loanaccount->user_id);
+                        $userPhone = ProfileEngine::getProfileContactByTypeOrderDesc($profile->id, 'PHONE');
+                        $userFirstName = $profile->firstName;
+                        $numbers = array();
+                        array_push($numbers, $userPhone);
+                        $textMessage = "Dear " . $userFirstName . ", your Penalty Accrual Frozen" . $expiryMessage ."For queries please contact your Account Manager . Thank you!";
+                        $alertType = '15';
+                        SMS::broadcastSMS($numbers, $textMessage, $alertType, $profile->id);
+
+                        /* Penlaty Freeze Successful  */
+                        $freezeSuccessful = 1;
+                    }else{
+                        $freezeSuccessful = 0;
+                    }
+                }else{
+                    $freezeSuccessful = 0;
+                }
+                break;
+
+                /* Account Already Frozen */
+            case 1:
+                $freezeSuccessful = 2;
+                break;
+
+                /* Account Not Found */
+            case 2:
+                $freezeSuccessful = 3;
+                break;
+
+        }
+        return $freezeSuccessful;
+
     }
 
     /*********************************************
@@ -598,6 +676,12 @@ class LoanManager{
         }
         return $unfrozen;
     }
+    /***********
+     * Loan Penalties
+     */
+
+
+
     /*******************
 
     LOAN RESTRUCTURING
@@ -899,12 +983,13 @@ class LoanManager{
                                 'CommandID' => $commandID,
                                 'Amount' => $amountPaid,
                                 'PartyA' => Yii::app()->params['X-BUSINESSCONSUMER-SHORTCODE'],
-                                'PartyB' => '254'.substr($phoneNumber,-9),
+                                'PartyB' => self::convertMsisdnToHash($phoneNumber),
                                 'Remarks' => $remarks,
                                 'QueueTimeOutURL' => Yii::app()->params['X-QUEUETIMEOUT-URL'],
                                 'ResultURL' => Yii::app()->params['X-CONSUMERAPIRESULTS-URL'],
                                 'Occasion' => ''
                             );
+                            echo "<pre>"; print_r($curl_post_data); echo "</pre>";
                             $data_string = json_encode($curl_post_data);
                             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
                             curl_setopt($curl, CURLOPT_POST, true);
@@ -945,6 +1030,11 @@ class LoanManager{
                 break;
         }
         return $paymentStatus;
+    }
+
+    public static function convertMsisdnToHash($msisdn) {
+        $msisdn = 254 . substr($msisdn, -9);
+        return hash('sha256', $msisdn);
     }
 
     public static function generateSTKPushAccessToken(){

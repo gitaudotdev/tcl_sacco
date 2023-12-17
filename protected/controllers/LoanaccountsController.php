@@ -26,7 +26,7 @@ class LoanaccountsController extends Controller{
                     'writeOffAccruedInterest','freeze','commitFreezing','unfreeze','commitUnfreezing',
                     'loadUserEmployer','updateDetails','updateStatus','loanRecovery','exportLoans','profitAndLoss','exportProfitAndLoss',
                     'dailyAccountReport','updateDates','updateRecentDates','disbursedAccounts','addGuarantor','deletePrincipalBalance',
-                    'updateWriteOffs','updateFrozenAccounts','createClearanceRecords','loanRepaymentSTKPush', 'loadBorrowerList'),
+                    'updateWriteOffs','updateFrozenAccounts','createClearanceRecords','loanRepaymentSTKPush', 'loadBorrowerList','freezePenalty','commitPenaltyFreezing'),
                 'users'=>array('@'),
             ),
             array('deny',
@@ -135,9 +135,9 @@ class LoanaccountsController extends Controller{
                             $data['insurance_fee_value'] = $insuranceRateValuee;
                             $data['processing_fee_value'] = $processingRateValuee;
 
-                            $data['freezing_period']      = $_POST['freezing_period'];
-                            
-                            
+                            $data['repayment_period']      = $_POST['repayment_period'];
+                            $data['repayment_frequency']     = $_POST['repayment_frequency'];
+
                             $data['direct_to']        = $_POST['Loanaccounts']['direct_to'];
                             $data['special_comment']  = $_POST['Loanaccounts']['special_comment'];
                             $data['filesPath']        = !empty($_FILES['path']) ? $_FILES['path'] : "";
@@ -589,8 +589,7 @@ class LoanaccountsController extends Controller{
                 //$amountFormatted = CommonFunctions::asMoney($amount);
                 $amount     = $_POST['amount_receivable']; //Go to system
                 $amountSentToClient     = $_POST['amount_approved'];   //mpesa
-                //var_dump($amountSentToClient);exit;
-                //$amountFormatted = CommonFunctions::asMoney($amount);
+                $pay_frequency = $_POST['pay_frequency'];
                 $amountFormatted = CommonFunctions::asMoney($amountSentToClient);
                 $reason      = $_POST['reason'];
                 $message     = "B2C M-PESA Transaction of $amountFormatted for Phone Number: $phoneNumber ";
@@ -601,8 +600,7 @@ class LoanaccountsController extends Controller{
 					 the client loan limit of KES $limitFormatted /=");
                 }else{
                     if($loanaccount->loan_status === '1'){
-                        //$status=LoanApplication::disburseLoanApplication($loanaccount_id,$amount,$reason);
-                        $status=LoanApplication::disburseLoanApplication($loanaccount_id,$amount,$reason,$amountSentToClient,$loanaccount["insurance_fee"],$loanaccount["processing_fee"]);
+                        $status=LoanApplication::disburseLoanApplication($loanaccount_id,$amount,$reason,$amountSentToClient,$loanaccount["insurance_fee"],$loanaccount["processing_fee"],$pay_frequency);
 
                         switch($status){
                             case 0:
@@ -874,6 +872,59 @@ class LoanaccountsController extends Controller{
         }
     }
 
+    public function actionFreezePenalty($id)
+    {
+        if(Navigation::checkIfAuthorized(138) === 1){
+            $model=$this->loadModel($id);
+            $loanfiles=LoanApplication::getLoanAccountFiles($id);
+            $comments=LoanApplication::getLoanComments($id);
+            $this->render('freezePenalty',array('model'=>$model,'files'=>$loanfiles,'comments'=>$comments));
+        }else{
+            CommonFunctions::setFlashMessage('danger',"You are not allowed to freeze interest accrual.");
+            $this->redirect(array('dashboard/default'));
+        }
+    }
+
+    //perform penalty freeze
+    public function actionCommitPenaltyFreezing()
+    {
+        switch(Navigation::checkIfAuthorized(138)){
+            case 0:
+                CommonFunctions::setFlashMessage('danger',"You are not allowed to freeze interest accrual.");
+                $this->redirect(array('dashboard/default'));
+                break;
+
+            case 1:
+                $loanaccount_id=$_POST['loanaccount_id'];
+                $period=(int)$_POST['freezing_period'];
+                $reason=$_POST['freezing_reason'];
+                switch(LoanManager::freezePenaltyAccrual($loanaccount_id,$period,$reason)){
+                    case 0:
+                        $type='danger';
+                        $message="Freezing penalty accrual failed.";
+                        break;
+
+                    case 1:
+                        $type='success';
+                        $message="Account Penalty accrual frozen successfully.";
+                        break;
+
+                    case 2:
+                        $type='danger';
+                        $message="Account penalty accrual has already been frozen.";
+                        break;
+
+                    case 3:
+                        $type='danger';
+                        $message="Account to be frozen unavailable.";
+                        break;
+                }
+                CommonFunctions::setFlashMessage($type,$message);
+                $this->redirect(array('admin'));
+                break;
+        }
+    }
+
     public function actionCalculator(){
         switch(Navigation::checkIfAuthorized(301)){
             case 0:
@@ -1087,13 +1138,14 @@ class LoanaccountsController extends Controller{
         $array=array('0','1','2','3','4','5');
         switch(CommonFunctions::searchElementInArray($element,$array)){
             case 0:
-                $model=new Imports;
-                $this->render('upload',array('model'=>$model));
-                break;
-
-            case 1:
                 CommonFunctions::setFlashMessage('danger',"Access Not Allowed.");
                 $this->redirect(array('dashboard/default'));
+                break;
+
+
+            case 1:
+                $model=new Imports;
+                $this->render('upload',array('model'=>$model));
                 break;
         }
     }
@@ -1103,6 +1155,11 @@ class LoanaccountsController extends Controller{
         $array=array('0','1','2','3','4','5');
         switch(CommonFunctions::searchElementInArray($element,$array)){
             case 0:
+                CommonFunctions::setFlashMessage('danger',"Access Not Allowed.");
+                $this->redirect(array('dashboard/default'));
+                break;
+
+            case 1:
                 $userID=Yii::app()->user->user_id;
                 $generatePassword=CommonFunctions::generateRandomString();
                 $uploadedFile=CUploadedFile::getInstanceByName('filename');
@@ -1112,7 +1169,8 @@ class LoanaccountsController extends Controller{
                     $message="No CSV File Uploaded. Please upload a CSV file in order to upload loan details.";
                     CommonFunctions::setFlashMessage($type,$message);
                     $this->redirect(array('upload'));
-                }else{
+                }
+                else{
                     $generateHash=CommonFunctions::generateRandomString();
                     $import=new Imports;
                     $import->filename=$uploadedFile;
@@ -1133,7 +1191,7 @@ class LoanaccountsController extends Controller{
                                     $rate=rtrim($data[2],"%");
                                     $userID=Yii::app()->user->user_id;
                                     $branch=Branch::model()->find('name=:a',array(':a'=>$branchName));
-                                    if($branch == TRUE){
+                                    if($branch){
                                         $user=new Users;
                                         $user->branch_id=$branch->branch_id;
                                         $user->first_name=$firstName;
@@ -1158,41 +1216,36 @@ class LoanaccountsController extends Controller{
                                         $borrower->branch_id=$branch->branch_id;
                                         $borrower->created_by=$userID;
                                         $borrower->save();
-                                        $loanproduct=Loanproduct::model()->find('interest_rate=:a',array(':a'=>$rate));
-                                        if($loanproduct == TRUE){
-                                            $staffName=$data[6];
-                                            $staff=Staff::model()->find('first_name=:a OR last_name=:a',array(':a'=>$staffName));
-                                            if($staff == TRUE){
-                                                $account=new Loanaccounts;
-                                                $account->loanaccount_id=$loanproduct->loanproduct_id;
-                                                $account->user_id=$borrower->user_id;
-                                                $account->account_number=LoanApplication::getLoanAccountNumber($borrower->user_id,$loanproduct->loanproduct_id);
-                                                $account->amount_applied=$data[4];
-                                                $account->loan_status='2';
-                                                $account->amount_approved=$data[4];
-                                                $account->date_approved=date('Y-m-d',strtotime($data[10]));
-                                                $account->approved_by=1;
-                                                $account->repayment_period=$data[3];
-                                                $account->rm=$staff->user_id;
-                                                $account->repayment_start_date=date('Y-m-d',strtotime($data[10]));
-                                                $account->created_by=$userID;
-                                                if($account->save()){
-                                                    $disburse=new DisbursedLoans;
-                                                    $disburse->loanaccount_id=$account->loanaccount_id;
-                                                    $disburse->amount_disbursed=$data[4];
-                                                    $disburse->disbursed_by=$userID;
-                                                    if($disburse->save()){
-                                                        $penalty=new Penaltyaccrued;
-                                                        $penalty->loanaccount_id=$disburse->loanaccount_id;
-                                                        $penalty->date_defaulted=date('Y-m-d',strtotime($data[10]));
-                                                        $penalty->penalty_amount=$data[5];
-                                                        $penalty->save();
-                                                    }
+                                        $staffName=$data[6];
+                                        $staff=Staff::model()->find('first_name=:a OR last_name=:a',array(':a'=>$staffName));
+                                        if($staff){
+                                            $account=new Loanaccounts;
+                                            $account->loanaccount_id=$loanproduct->loanproduct_id;
+                                            $account->user_id=$borrower->user_id;
+                                            $account->account_number=LoanApplication::getLoanAccountNumber($borrower->user_id,$loanproduct->loanproduct_id);
+                                            $account->amount_applied=$data[4];
+                                            $account->loan_status='2';
+                                            $account->amount_approved=$data[4];
+                                            $account->date_approved=date('Y-m-d',strtotime($data[10]));
+                                            $account->approved_by=1;
+                                            $account->repayment_period=$data[3];
+                                            $account->rm=$staff->user_id;
+                                            $account->repayment_start_date=date('Y-m-d',strtotime($data[10]));
+                                            $account->created_by=$userID;
+                                            if($account->save()){
+                                                $disburse=new DisbursedLoans;
+                                                $disburse->loanaccount_id=$account->loanaccount_id;
+                                                $disburse->amount_disbursed=$data[4];
+                                                $disburse->disbursed_by=$userID;
+                                                if($disburse->save()){
+                                                    $penalty=new Penaltyaccrued;
+                                                    $penalty->loanaccount_id=$disburse->loanaccount_id;
+                                                    $penalty->date_defaulted=date('Y-m-d',strtotime($data[10]));
+                                                    $penalty->penalty_amount=$data[5];
+                                                    $penalty->save();
                                                 }
                                             }
                                         }
-
-
                                     }
                                 }
                                 $row++;
@@ -1223,10 +1276,8 @@ class LoanaccountsController extends Controller{
                 }
                 break;
 
-            case 1:
-                CommonFunctions::setFlashMessage('danger',"Access Not Allowed.");
-                $this->redirect(array('dashboard/default'));
-                break;
+
+
         }
     }
 
@@ -2785,12 +2836,27 @@ class LoanaccountsController extends Controller{
                 break;
         }
     }
-    
+
     public function actionLoadBorrowerList(){
         $member_type = $_POST['member_type'];
         $members = ProfileEngine::getProfilesByCategory($member_type);
         //return list of members
         echo CJSON::encode($members);
+    }
+
+    public function actionImport(){
+        switch (Navigation::checkIfAuthorized(158))
+        {
+            case 0:
+                CommonFunctions::setFlashMessage('danger',"Not Authorized to import loan accounts.");
+                $this->redirect(array('dashboard/default'));
+                break;
+
+            case 1:
+                $model = new Imports;
+                $this->render('upload',array('model'=>$model));
+                break;
+        }
     }
 
     public function loadModel($id){
