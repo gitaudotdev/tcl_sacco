@@ -594,6 +594,14 @@ class Loanaccounts extends CActiveRecord{
 		return CommonFunctions::asMoney(LoanManager::getUnpaidAccruedInterest($this->loanaccount_id));
 	}
 
+    public function getPaymentFrequency(){
+        return ucfirst($this->pay_mode);
+    }
+
+    public function getDailyPenalty(){
+        return $this->penalty_amount;
+    }
+
 	public function getAccountPrincipalBalance(){
 		return CommonFunctions::asMoney(LoanManager::getPrincipalBalance($this->loanaccount_id));
 	}

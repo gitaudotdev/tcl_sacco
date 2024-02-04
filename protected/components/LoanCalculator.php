@@ -83,4 +83,13 @@ class LoanCalculator{
             return round($emi,4);
         }
     }
+
+    public static function getNewEMIAmount($amount_applied, $interest_rate, $period, $num_payments){
+        $principal = $amount_applied;
+        $monthly_interest_rate = $interest_rate / 100; // monthly interest rate
+        $total_interest = $principal * $monthly_interest_rate; // total interest for the loan period
+        $total_payable = $principal + $total_interest; // total payable amount
+        $emi = $total_payable / $num_payments; // equated monthly installment
+        return round($emi, 4);
+    }
 }

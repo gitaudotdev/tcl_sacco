@@ -83,10 +83,10 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
 										'header'=>'Client Account',
 										'value'=>'$data->clientAccount',
 									),
-									array(
-										'header'=>'Phone Number',
-										'value'=>'$data->source',
-									),
+//									array(
+//										'header'=>'Phone Number',
+//										'value'=>'$data->source',
+//									),
 									array(
 										'header'=>'Date Transacted',
 										'name'=>'PaymentTransactionDate',

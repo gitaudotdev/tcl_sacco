@@ -87,10 +87,10 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
 								'header'=>'Account #',
 								'name'=>'SavingAccountNumber',
 							),
-							array(
-								'header'=>'Transacted Phone',
-								'name'=>'SavingTransactionPhoneNumber',
-							),
+//							array(
+//								'header'=>'Transacted Phone',
+//								'name'=>'SavingTransactionPhoneNumber',
+//							),
 							array(
 								'header'=>'Branch',
 								'name'=>'SavingAccountBranch',

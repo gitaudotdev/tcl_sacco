@@ -505,7 +505,7 @@ class LoanaccountsController extends Controller{
                 $receivableAmount=$amount-$deductions;
 
                 $finalApprovedAmount         = $receivableAmount;
-                $repayment_period=$_POST['repayment_period'];
+//                $repayment_period=$_POST['repayment_period'];
                 $repayment_start_date=$_POST['repayment_start_date'];
                 $penalty_amount=$_POST['penalty_amount'];
                 $reason=$_POST['reason'];
@@ -516,7 +516,7 @@ class LoanaccountsController extends Controller{
                 }else{
                     $authStatus = array('0','10');
                     if(CommonFunctions::searchElementInArray($model->loan_status,$authStatus) === 1){
-                        switch(LoanApplication::approveLoanAccount($loanaccount_id,$amount,$repayment_period,$repayment_start_date,$penalty_amount,$reason,$insuranceAmount,$processingAmount,$deductions,$finalApprovedAmount,$pay_frequency)){
+                        switch(LoanApplication::approveLoanAccount($loanaccount_id,$amount,$repayment_start_date,$penalty_amount,$reason,$insuranceAmount,$processingAmount,$deductions,$finalApprovedAmount,$pay_frequency)){
                             case 0:
                                 $type='danger';
                                 $message="Application not approved. Please try again.";

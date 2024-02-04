@@ -71,10 +71,10 @@ $('.search-form form').submit(function(){
 								'header'=>'Amount',
 								'name'=>'TotalAmountPaid',
 							),
-							array(
-								'header'=>'Paid By',
-								'name'=>'RepaymentTransactingPhone',
-							),
+//							array(
+//								'header'=>'Paid By',
+//								'name'=>'RepaymentTransactingPhone',
+//							),
 							array(
 								'header'=>'Member',
 								'name'=>'LoanBorrowerName',

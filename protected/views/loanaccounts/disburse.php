@@ -157,10 +157,10 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                                 <td><div class="text-wrap">Amount Disbursed</div></td>
                                 <td><div class="text-wrap"><?=CommonFunctions::asMoney(LoanManager::getPrincipalDisbursed($model->loanaccount_id));?></div></td>
                             </tr>
-                            <tr>
-                                <td><div class="text-wrap">Expected Payments</div></td>
-                                <td><div class="text-wrap"><?=$model->repayment_period;?> </div></td>
-                            </tr>
+<!--                            <tr>-->
+<!--                                <td><div class="text-wrap">Expected Payments</div></td>-->
+<!--                                <td><div class="text-wrap">--><?php //=$model->repayment_period;?><!-- </div></td>-->
+<!--                            </tr>-->
                             <tr>
                                 <td><div class="text-wrap">Last Repayment Date</div></td>
                                 <td><div class="text-wrap"><?=date('jS M Y',strtotime($model->repayment_start_date));?></div> </td>
@@ -293,10 +293,10 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                             </tr>
                             <tr>
                                 <td>Installments Amount</td>
-                                <td><?=CommonFunctions::asMoney(LoanCalculator::getEMIAmount($model->amount_applied,$model->interest_rate,$model->repayment_period));?> </td>
+                                <td><?=CommonFunctions::asMoney(LoanCalculator::getNewEMIAmount($model->amount_applied,$model->interest_rate,$model->repayment_period,$model->repayments_count));?> </td>
                             </tr>
                             <tr>
-                                <td>Payment Model</td>
+                                <td>Payment Frequency</td>
                                 <td><?=$model->pay_mode ? $model->pay_mode : 'monthly';?> </td>
                             </tr>
                             <tr>
@@ -547,7 +547,7 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                         ?>
                         <div class="col-md-8 col-lg-8 col-sm-12">
                             <div class="form-group">
-                                <label>Payment Model</label>
+                                <label>Payment Frequency</label>
                                 <select class="form-control selectpicker" name="pay_frequency" id="pay_frequency">
                                     <option value="<?= $firstOption ?>"><?= ucfirst($firstOption) ?></option>
                                     <option value="daily">Daily</option>

@@ -56,7 +56,7 @@ $('.search-form form').submit(function(){
                         ),
                         array(
                             'header'=>'Date Defaulted',
-                            'name'=>'DateDefaulted',
+                            'name'=>'DefaultedDate',
                         ),
 						array(
 							'header'=>'Is Paid',

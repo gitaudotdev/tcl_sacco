@@ -124,16 +124,24 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                                 'value'=>'$data->amount_approved',
                             ),
                             array(
-                                'header'=>'Rate',
+                                'header'=>'Mthly %',
                                 'name'=>'InterestRate',
                             ),
                             array(
-                                'header'=>'Accrued',
+                                'header'=>' Acc Int',
                                 'name'=>'AccruedInterest',
                             ),
                             array(
-                                'header'=>'Penalties',
+                                'header'=>'Set Pty',
+                                'name'=>'DailyPenalty',
+                            ),
+                            array(
+                                'header'=>'Acc Pty',
                                 'name'=>'AccountPenalties',
+                            ),
+                            array(
+                                'header'=>' Pyt Frq',
+                                'name'=>'PaymentFrequency',
                             ),
                             array(
                                 'header'=>'Balance',

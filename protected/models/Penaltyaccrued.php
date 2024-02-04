@@ -110,8 +110,11 @@ class Penaltyaccrued extends CActiveRecord
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
+            'sort'=>array(
+                'defaultOrder'=>'created_at DESC',
+            ),
             'pagination'=>array(
-                'pageSize'=>30
+                'pageSize'=>Yii::app()->params['DEFAULTRECORDSPERPAGE']
             ),
         ));
     }

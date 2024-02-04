@@ -5,9 +5,9 @@ require 'php_mailer/class.phpmailer.php';
 require 'AfricasTalkingGateway.php';
 /****  DB  CONFIGS ******/
 const DB_HOST = 'localhost';
-const DB_AUTH_USER= 'tcl';
-const DB_AUTH_PWD = 'BOSS2023';
-const DB_AUTH_DB= 'davies_repo2';
+const DB_AUTH_USER= 'root';
+const DB_AUTH_PWD = 'root';
+const DB_AUTH_DB= 'repo_2';
 
 /****** B2C *********/
 const X_CONSUMERSOURCE_KEY ='pzS4Jxv89arphaE8lPqEAcvnGAADWhCb';

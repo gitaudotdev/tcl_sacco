@@ -62,7 +62,7 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
           		</tr>
           		<tr>
           			<td>Phone Number</td>
-          			<td><?=Users::model()->findByPk($model->user_id)->UserPhoneNumberAlternate;?></td>
+          			<td><?=Profiles::model()->findByPk($model->user_id)->ProfilePhoneNumber;?></td>
           		</tr>
           		<tr>
           			<td>Expense Type</td>

@@ -168,10 +168,10 @@ $allowed       = array('2','5','6','7');
                                     <td><div class="text-wrap"><?=CommonFunctions::asMoney(LoanApplication::getEMIAmount($model->loanaccount_id));?></div> </td>
                                 </tr>
 
-                                <tr>
-                                    <td><div class="text-wrap">Expected Payments</div></td>
-                                    <td><div class="text-wrap"><?=$model->repayment_period;?> (one)</div></td>
-                                </tr>
+<!--                                <tr>-->
+<!--                                    <td><div class="text-wrap">Expected Payments</div></td>-->
+<!--                                    <td><div class="text-wrap">--><?php //=$model->repayment_period;?><!-- (one)</div></td>-->
+<!--                                </tr>-->
 
                                 <tr>
                                     <td><div class="text-wrap">Date Disbursed</div></td>
@@ -181,6 +181,10 @@ $allowed       = array('2','5','6','7');
                                 <tr>
                                     <td><div class="text-wrap">Expiry Date</div></td>
                                     <td><div class="text-wrap"><?=date('jS M Y',strtotime($model->repayment_start_date));?></div> </td>
+                                </tr>
+                                <tr>
+                                    <td><div class="text-wrap">Set Penalty</div></td>
+                                    <td><div class="text-wrap"><?=$model->penalty_amount;?></div> </td>
                                 </tr>
                                 <tr>
                                     <td><div class="text-wrap">Penalty Accrued</div></td>

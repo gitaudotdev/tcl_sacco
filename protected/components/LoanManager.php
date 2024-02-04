@@ -983,7 +983,7 @@ class LoanManager{
                                 'CommandID' => $commandID,
                                 'Amount' => $amountPaid,
                                 'PartyA' => Yii::app()->params['X-BUSINESSCONSUMER-SHORTCODE'],
-                                'PartyB' => self::convertMsisdnToHash($phoneNumber),
+                                'PartyB' => self::reconstructPhoneNumber($phoneNumber),
                                 'Remarks' => $remarks,
                                 'QueueTimeOutURL' => Yii::app()->params['X-QUEUETIMEOUT-URL'],
                                 'ResultURL' => Yii::app()->params['X-CONSUMERAPIRESULTS-URL'],
@@ -1030,6 +1030,27 @@ class LoanManager{
                 break;
         }
         return $paymentStatus;
+    }
+
+
+    public static  function reconstructPhoneNumber($number) {
+        // Ensure the number is a string
+        $number = strval($number);
+
+        // Remove leading "+" or "0"
+        if (strpos($number, '+') === 0) {
+            $number = substr($number, 1);
+        } elseif (strpos($number, '0') === 0) {
+            $number = substr($number, 1);
+        }
+
+        // Remove the "0" between "254" and "7" if present
+        if (strpos($number, '25407') === 0) {
+            $number = '2547' . substr($number, 5);
+        }
+
+        // Return the reconstructed number
+        return $number;
     }
 
     public static function convertMsisdnToHash($msisdn) {

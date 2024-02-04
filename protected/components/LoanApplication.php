@@ -18,15 +18,15 @@ class LoanApplication{
                 $amountValue  = str_replace($bad_symbols,"",$data['amount']);
 
                 $receivableAmountValue  = str_replace($bad_symbols,"",$data['receivable_amount']);
-                $insuranceAmountValue  = $data['insurance_fee'];
-                $processingAmountValue  = $data['processing_fee'];
-                $deductionsAmountValue  = $data['deduction_fee'];
+                $insuranceAmountValue  = $data['insurance_fee'] != 'NOT SET' ? $data['insurance_fee'] : 1;
+                $processingAmountValue  = $data['processing_fee'] != 'NOT SET' ?  $data['processing_fee']  :1;
+                $deductionsAmountValue  = $data['deduction_fee'] != 'NOT SET' ? $data['deduction_fee'] : 1;
 
-                $insuranceValueRate  = $data['insurance_fee_value'];
-                $processingValueRate  = $data['processing_fee_value'];
+                $insuranceValueRate  = $data['insurance_fee_value'] != 'NOT SET' ?  $data['insurance_fee_value']  :1;
+                $processingValueRate  = $data['processing_fee_value'] != 'NOT SET' ?  $data['processing_fee_value']  :1;
 
-                $loanPeriod = $data['repayment_period'];
-                $repaymentFrequency = $data['repayment_frequency'];
+                $loanPeriod = $data['repayment_period'] != 'NOT SET' ? $data['repayment_period']  : 1;
+                $repaymentFrequency = $data['repayment_frequency'] != 'NOT SET' ? $data['repayment_frequency'] : 1;
 
                 if($amountValue <= $loanLimit){
                     $loanaccount  = new Loanaccounts;
@@ -42,7 +42,7 @@ class LoanApplication{
 
                     $loanaccount->insurance_fee_value   = $insuranceValueRate;
                     $loanaccount->processing_fee_value  = $processingValueRate;
-                    $loanaccount->member_type = $profile->clientCategoryClass;
+                    $loanaccount->member_type = 'BUSINESS';
 
 
                     $loanaccount->repayment_cycle      = Yii::app()->params['DEFAULTREPAYMENTCYCLE'];
@@ -248,13 +248,13 @@ class LoanApplication{
         return DisbursedLoans::model()->findAllBySql("SELECT * FROM disbursed_loans WHERE loanaccount_id=$loanaccount_id");
     }
 
-    public static function approveLoanAccount($loanaccount_id,$amount,$repayment_period,$repayment_start_date,$penalty_amount,$approval_reason,$insuranceAmount,$processingAmount,$deductions,$finalApprovedAmount,$pay_frequency){
+    public static function approveLoanAccount($loanaccount_id,$amount,$repayment_start_date,$penalty_amount,$approval_reason,$insuranceAmount,$processingAmount,$deductions,$finalApprovedAmount,$pay_frequency){
         $loanaccount=LoanApplication::getLoanAccount($loanaccount_id);
         $loanaccount->loan_status='1';
         $loanaccount->date_approved=date('Y-m-d');
         $loanaccount->penalty_amount=$penalty_amount;
         $loanaccount->approval_reason=$approval_reason;
-        $loanaccount->repayment_period=$repayment_period;
+//        $loanaccount->repayment_period=$repayment_period;
         $loanaccount->repayment_start_date=$repayment_start_date;
         //$loanaccount->amount_approved=$amount;
         $loanaccount->amount_approved=$finalApprovedAmount;
@@ -355,7 +355,6 @@ class LoanApplication{
                     case 1:
                         $loanaccount->loan_status='2';
                         $loanaccount->disbursal_reason=$disbursal_reason;
-                        $loanaccount->pay_frequency = $payFrequency;
                         $loanaccount->save();
                         $disburse=new DisbursedLoans;
                         $disburse->loanaccount_id=$loanaccount_id;
@@ -377,7 +376,9 @@ class LoanApplication{
 
                             //calculate total loan interest and record Accrued Interest
                             $interestRate = $loanaccount->interest_rate;
-                            $loanInterest = LoanManager::getTotalLoanInterestAmount($interestRate,$loanaccount->amount_applied);
+                            $amountApplied = $loanaccount->amount_applied;
+                            $loanInterest = LoanManager::getTotalLoanInterestAmount($interestRate,$amountApplied);
+                            //echo "<pre>"; print_r($loanInterest); echo "</pre>"; die();
                             if($loanInterest > 0){
                                 LoanManager::recordAccruedInterest($loanaccount->loanaccount_id,$loanInterest,'debit','0');
                             }
@@ -414,16 +415,11 @@ class LoanApplication{
                         $disburse->disbursed_by=Yii::app()->user->user_id;
                         $disburse->disbursed_at = date('Y-m-d H:i:s');
                         if($disburse->save()){
-                            //calculate interest payable for days frozen
-                            $freezingPeriod = $loanaccount->freezing_period;
-                            if($freezingPeriod > 0){
-                                $interestRate = $loanaccount->interest_rate;
-                                $interestPayable      = LoanManager::getInterestAmount($interestRate,$freezingPeriod,$loanaccount->amount_applied);
-                                $bad_symbols = array(",");
-                                $interestPayable =  str_replace($bad_symbols,"",$interestPayable);
-                                if($interestPayable > 0){
-                                    LoanManager::recordAccruedInterest($loanaccount->loanaccount_id,$interestPayable,'debit','0');
-                                }
+                            $interestRate = $loanaccount->interest_rate;
+                            $amountApplied = $loanaccount->amount_applied;
+                            $loanInterest = LoanManager::getTotalLoanInterestAmount($interestRate,$amountApplied);
+                            if($loanInterest > 0){
+                                LoanManager::recordAccruedInterest($loanaccount->loanaccount_id,$loanInterest,'debit','0');
                             }
                             $data['loanaccount_id']=$loanaccount_id;
                             $data['comment']=$disbursal_reason;

@@ -147,7 +147,7 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                                 </tr>
                                 <tr>
                                     <td>Expected Payments</td>
-                                    <td><?=$model->repayment_period;?></td>
+                                    <td><?=$model->repayments_count;?></td>
                                 </tr>
 
                                 <tr>
@@ -156,7 +156,7 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                                 </tr>
                                 <tr>
                                     <td>Installment</td>
-                                    <td><?=CommonFunctions::asMoney(LoanCalculator::getEMIAmount($model->amount_applied,$model->interest_rate,$model->repayment_period));?> </td>
+                                    <td><?=CommonFunctions::asMoney(LoanCalculator::getNewEMIAmount($model->amount_applied,$model->interest_rate,$model->repayment_period,$model->repayments_count));?> </td>
                                 </tr>
 
                             </table>
@@ -447,9 +447,6 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <div class="form-group">
-                                <!--                              <label>Insurance Fee</label>-->
-                                <!--                              <input type="text" class="form-control" readonly value="--><?php //=$model->insurance_fee;?><!--" name="insurance_fee" id="insurance_fee">-->
-                                <!--                              -->
                                 <label>Insurance Rate</label>
                                 <input type="text" class="form-control" readonly value="<?=$model->insurance_fee_value;?> %" name="insurance_rate_value" id="insurance_rate_value">
                             </div>
@@ -460,9 +457,6 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <div class="form-group">
-                                <!--                           <label>Processing Fee</label>-->
-                                <!--                           <input type="text" class="form-control" readonly value="--><?php //=$model->processing_fee;?><!--" name="processing_fee" id="processing_fee">-->
-                                <!--                      -->
                                 <label>Processing Rate</label>
                                 <input type="text" class="form-control" readonly value="<?=$model->processing_fee_value;?> %" name="processing_rate_value" id="processing_rate_value">
 
@@ -472,28 +466,23 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
 
 
 
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-12 col-lg-12 col-sm-12">-->
+<!--                            <div class="form-group">-->
+<!--                                <label>Expected Payments</label>-->
+<!--                                <input type="text" class="form-control" required="required" value="--><?php //=$model->repayments_count;?><!--" name="repayment_period">-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
                     <div class="row">
+                        <?php
+                        $firstOption = $model->pay_mode
+                        ?>
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <div class="form-group">
-                                <label>Expected Payments</label>
-                                <input type="text" class="form-control" required="required" value="<?=$model->repayments_count;?>" name="repayment_period">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12 col-sm-12">
-                            <div class="form-group">
-                                <label>Repayment Start Date</label>
-                                <input type="text" class="form-control" required="required" value="<?=$model->repayment_start_date;?>" name="repayment_start_date" id="normaldatepicker">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12 col-sm-12">
-                            <div class="form-group">
-                                <label>Payment Method</label>
+                                <label>Payment Frequency</label>
                                 <select class="form-control selectpicker" name="pay_frequency" id="pay_frequency">
+                                    <option value="<?= $firstOption ?>"><?= ucfirst($firstOption) ?></option>
                                     <option value="daily">Daily</option>
                                     <option value="weekly">Weekly</option>
                                     <option value="biweekly">Biweekly</option>
@@ -502,6 +491,16 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-sm-12">
+                            <div class="form-group">
+                                <label>Repayment Start Date</label>
+                                <input type="text" class="form-control" required="required" value="<?=$model->repayment_start_date;?>" name="repayment_start_date" id="repayment_start" readonly>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <div class="form-group">
@@ -752,6 +751,8 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
     function LoadAddFile(){
         $('#addFile').modal({show:true});
     }
+
+
 </script>
 
 <script type="text/javascript">
@@ -775,6 +776,50 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                 label.innerText = value
             }
     }
+</script>
+
+<script>
+    $(document).ready(function() {
+        // Store the initial repayment start date
+        var initialRepaymentStartDate = "<?= $model->repayment_start_date ?>";
+
+        // Event handler for payment frequency change
+        $('#pay_frequency').on('change', function() {
+            var selectedFrequency = $(this).val();
+            var newRepaymentStartDate = calculateNewRepaymentStartDate(selectedFrequency);
+
+            // Update the input field with the new repayment start date
+            $('#repayment_start').val(newRepaymentStartDate);
+        });
+
+        // Function to calculate the new repayment start date based on frequency
+        function calculateNewRepaymentStartDate(frequency) {
+            var currentDate = new Date(); // Current date
+
+            // Set the new repayment start date based on frequency
+            switch (frequency) {
+                case 'daily':
+                    currentDate.setDate(currentDate.getDate() + 1); // Next day
+                    break;
+                case 'weekly':
+                    currentDate.setDate(currentDate.getDate() + 7); // 7 days later
+                    break;
+                case 'biweekly':
+                    currentDate.setDate(currentDate.getDate() + 14); // 14 days later
+                    break;
+                case 'monthly':
+                    currentDate.setDate(currentDate.getDate() + 30); // 30 days later (approximation)
+                    break;
+                default:
+                    // For unknown frequency, use the initial date
+                    return initialRepaymentStartDate;
+            }
+
+            // Format the new date as a string
+            var newDate = currentDate.toISOString().split('T')[0];
+            return newDate;
+        }
+    });
 </script>
 
 

@@ -200,7 +200,7 @@ return array(
 //            'PROCESSING_PERCENT'      => 0.00,
         ),
         'DEFAULTRECORDSPERPAGE'     => 30,
-        'DEFAULTREPAYMENTPERIOD'    => 1,
+        'DEFAULTREPAYMENTPERIOD'    => 30,
         'DEFAULTREPAYMENTCYCLE'     => '2',
         'DEFAULTREPAYMENTSTARTDATE' => date("Y-m-d",strtotime(date('Y-m-d').'+30 days')),
         'DEFAULTMAXLOANAMOUNT'      => 10000,
