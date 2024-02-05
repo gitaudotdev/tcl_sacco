@@ -65,9 +65,11 @@ $dangerStatus = CommonFunctions::checkIfFlashMessageSet($dangerType);
                         <div class="col-lg-3 col-md-4 col-sm-12">
                             <a href="<?=Yii::app()->createUrl('loanaccounts/create');?>" title='Create Application' class="btn btn-success pull-left">New Application</a>
                         </div>
+                        <?php if(Navigation::checkIfAuthorized(311) == 1):?>
                         <div class="col-lg-3 col-md-4 col-sm-12">
                             <a href="<?=Yii::app()->createUrl('loanaccounts/upload');?>"  title='Bulk Import Accounts' class="btn btn-info">Import Accounts</a>
                         </div>
+                        <?php endif;?>
                         <?php if(Navigation::checkIfAuthorized(158) == 1):?>
                             <div class="col-lg-3 col-md-4 col-sm-12">
                                 <a href="<?=Yii::app()->createUrl('loanaccounts/exportLoans');?>" target='_blank' title='CRB Listing Report' class="btn btn-warning">CRB Report</a>

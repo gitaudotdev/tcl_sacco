@@ -1136,7 +1136,8 @@ class LoanaccountsController extends Controller{
     public function actionUpload(){
         $element=Yii::app()->user->user_level;
         $array=array('0','1','2','3','4','5');
-        switch(CommonFunctions::searchElementInArray($element,$array)){
+        switch (Navigation::checkIfAuthorized(311))
+        {
             case 0:
                 CommonFunctions::setFlashMessage('danger',"Access Not Allowed.");
                 $this->redirect(array('dashboard/default'));
