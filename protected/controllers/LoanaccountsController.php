@@ -26,7 +26,8 @@ class LoanaccountsController extends Controller{
                     'writeOffAccruedInterest','freeze','commitFreezing','unfreeze','commitUnfreezing',
                     'loadUserEmployer','updateDetails','updateStatus','loanRecovery','exportLoans','profitAndLoss','exportProfitAndLoss',
                     'dailyAccountReport','updateDates','updateRecentDates','disbursedAccounts','addGuarantor','deletePrincipalBalance',
-                    'updateWriteOffs','updateFrozenAccounts','createClearanceRecords','loanRepaymentSTKPush', 'loadBorrowerList','freezePenalty','commitPenaltyFreezing'),
+                    'updateWriteOffs','updateFrozenAccounts','createClearanceRecords','loanRepaymentSTKPush', 'loadBorrowerList',
+                    'freezePenalty','commitPenaltyFreezing','unfreezePenalty','commitPenaltyUnfreezing'),
                 'users'=>array('@'),
             ),
             array('deny',
@@ -874,7 +875,7 @@ class LoanaccountsController extends Controller{
 
     public function actionFreezePenalty($id)
     {
-        if(Navigation::checkIfAuthorized(138) === 1){
+        if(Navigation::checkIfAuthorized(314) === 1){
             $model=$this->loadModel($id);
             $loanfiles=LoanApplication::getLoanAccountFiles($id);
             $comments=LoanApplication::getLoanComments($id);
@@ -885,7 +886,18 @@ class LoanaccountsController extends Controller{
         }
     }
 
-    //perform penalty freeze
+    public function actionUnFreezePenalty($id){
+        if(Navigation::checkIfAuthorized(315) === 1){
+            $model=$this->loadModel($id);
+            $loanfiles=LoanApplication::getLoanAccountFiles($id);
+            $comments=LoanApplication::getLoanComments($id);
+            $this->render('unfreezePenalty',array('model'=>$model,'files'=>$loanfiles,'comments'=>$comments));
+        }else{
+            CommonFunctions::setFlashMessage('danger',"You are not allowed to unfreeze penalty accrual.");
+            $this->redirect(array('dashboard/default'));
+        }
+    }
+
     public function actionCommitPenaltyFreezing()
     {
         switch(Navigation::checkIfAuthorized(138)){
@@ -917,6 +929,33 @@ class LoanaccountsController extends Controller{
                     case 3:
                         $type='danger';
                         $message="Account to be frozen unavailable.";
+                        break;
+                }
+                CommonFunctions::setFlashMessage($type,$message);
+                $this->redirect(array('admin'));
+                break;
+        }
+    }
+
+    public function actionCommitPenaltyUnfreezing(){
+        switch(Navigation::checkIfAuthorized(314)){
+            case 0:
+                CommonFunctions::setFlashMessage('danger',"You are not allowed to unfreeze penalty accrual.");
+                $this->redirect(array('dashboard/default'));
+                break;
+
+            case 1:
+                $loanaccount_id=$_POST['loanaccount_id'];
+                $reason=$_POST['reason'];
+                switch(LoanManager::unfreezePenaltyAccrual($loanaccount_id,$reason)){
+                    case 0:
+                        $type='danger';
+                        $message="Unfreezing account penalty accrual failed.";
+                        break;
+
+                    case 1:
+                        $type='success';
+                        $message="Account penalty accrual unfrozen successfully.";
                         break;
                 }
                 CommonFunctions::setFlashMessage($type,$message);
@@ -2508,16 +2547,19 @@ class LoanaccountsController extends Controller{
                         $risk="A";
                         $crbStatus="a";
                     }elseif($arrearsDays >= 0 && $arrearsDays <=30){
-                        $risk="A";
-                        $crbStatus="a";
-                    }elseif($arrearsDays >30 && $arrearsDays <=90 ){
                         $risk="B";
                         $crbStatus="a";
-                    }elseif($arrearsDays >90 && $arrearsDays <=180){
+                    }elseif($arrearsDays >30 && $arrearsDays <=60 ){
                         $risk="C";
                         $crbStatus="a";
-                    }elseif($arrearsDays >180 && $arrearsDays <=360){
+                    }elseif($arrearsDays >60 && $arrearsDays <=90 ){
                         $risk="D";
+                        $crbStatus="a";
+                    }elseif($arrearsDays >90 && $arrearsDays <=180){
+                        $risk="E";
+                        $crbStatus="a";
+                    }elseif($arrearsDays >180 && $arrearsDays <=360){
+                        $risk="E";
                         $crbStatus="b";
                     }elseif($arrearsDays >360){
                         $risk="E";

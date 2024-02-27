@@ -18,15 +18,15 @@ class LoanApplication{
                 $amountValue  = str_replace($bad_symbols,"",$data['amount']);
 
                 $receivableAmountValue  = str_replace($bad_symbols,"",$data['receivable_amount']);
-                $insuranceAmountValue  = $data['insurance_fee'] != 'NOT SET' ? $data['insurance_fee'] : 1;
-                $processingAmountValue  = $data['processing_fee'] != 'NOT SET' ?  $data['processing_fee']  :1;
-                $deductionsAmountValue  = $data['deduction_fee'] != 'NOT SET' ? $data['deduction_fee'] : 1;
+                $insuranceAmountValue  = $data['insurance_fee'] != 'NOT SET' ? $data['insurance_fee'] : 0;
+                $processingAmountValue  = $data['processing_fee'] != 'NOT SET' ?  $data['processing_fee']  :0;
+                $deductionsAmountValue  = $data['deduction_fee'] != 'NOT SET' ? $data['deduction_fee'] : 0;
 
-                $insuranceValueRate  = $data['insurance_fee_value'] != 'NOT SET' ?  $data['insurance_fee_value']  :1;
-                $processingValueRate  = $data['processing_fee_value'] != 'NOT SET' ?  $data['processing_fee_value']  :1;
+                $insuranceValueRate  = $data['insurance_fee_value'] != 'NOT SET' ?  $data['insurance_fee_value']  :0;
+                $processingValueRate  = $data['processing_fee_value'] != 'NOT SET' ?  $data['processing_fee_value']  :0;
 
-                $loanPeriod = $data['repayment_period'] != 'NOT SET' ? $data['repayment_period']  : 1;
-                $repaymentFrequency = $data['repayment_frequency'] != 'NOT SET' ? $data['repayment_frequency'] : 1;
+                $loanPeriod = $data['repayment_period'] != 'NOT SET' ? $data['repayment_period']  : 0;
+                $repaymentFrequency = $data['repayment_frequency'] != 'NOT SET' ? $data['repayment_frequency'] : 0;
 
                 if($amountValue <= $loanLimit){
                     $loanaccount  = new Loanaccounts;
@@ -103,11 +103,13 @@ class LoanApplication{
                             LoanApplication::uploadApplicationSupportFiles($filePath,$loanaccount);
                         }
                         if($loanPeriod > 0){
+                            LoanManager::freezePenaltyAccrual($loanaccount->loanaccount_id,$loanPeriod,"Loan Application");
                             LoanManager::freezeInterestAccrual($loanaccount->loanaccount_id,$loanPeriod,"Loan Application");
                         }
 
                         $status = 1;
-                    }else{
+                    }
+                    else{
                         $status = 0;
                     }
                 }else{
@@ -256,6 +258,7 @@ class LoanApplication{
         $loanaccount->approval_reason=$approval_reason;
 //        $loanaccount->repayment_period=$repayment_period;
         $loanaccount->repayment_start_date=$repayment_start_date;
+        $loanaccount->next_pay_date=$repayment_start_date;
         //$loanaccount->amount_approved=$amount;
         $loanaccount->amount_approved=$finalApprovedAmount;
         $loanaccount->approved_by=Yii::app()->user->user_id;

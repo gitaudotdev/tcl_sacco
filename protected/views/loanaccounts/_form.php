@@ -131,7 +131,7 @@
         <div class="col-md-3 col-lg-3 col-sm-12">
             <div class="form-group">
                 <label>Loan Period</label>
-                <select class="form-control selectpicker" name="repayment_period">
+                <select class="form-control selectpicker" name="repayment_period" id="repaymentPeriod">
                     <option value="1">One Day</option>
                     <option value="7">One Week</option>
                     <option value="14">Two Weeks</option>
@@ -164,12 +164,12 @@
         <div class="col-md-3 col-lg-3 col-sm-12">
             <div class="form-group">
                 <label>Repayment Frequency</label>
-                <select class="form-control selectpicker" name="repayment_frequency">
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="bi-weekly">Biweekly</option>
-                    <option value="monthly">Monthly</option>
-                    <option value="quarterly">Quarterly</option>
+                <select class="form-control selectpicker" name="repayment_frequency" id="payFrequency">
+                    <option id="daily" value="daily">Daily</option>
+                    <option id="weekly" value="weekly">Weekly</option>
+                    <option id="bi-weekly" value="bi-weekly">Bi-Weekly</option>
+                    <option id="monthly" value="monthly">Monthly</option>
+                    <option id="quarterly" value="quarterly">Quarterly</option>
                 </select>
             </div>
         </div>
@@ -298,9 +298,21 @@
         });
     });
 
+
+    // $(document).ready(function() {
+    //     // Disable all options except 'daily'
+    //     // $('#payFrequency option').each(function() {
+    //     //     if (this.value !== 'daily') {
+    //     //         $(this).prop('disabled', true);
+    //     //     }
+    //     // });
+    //     updatePayFrequency();
+    // });
+
+
     //when loan period is changed calculate expiry date
     $(function(){
-        $('select[name="repayment_period"]').on('change', function() {
+        $('#repaymentPeriod').on('change', function() {
             var days = this.value;
             var date = new Date();
             var newdate = new Date(date);
@@ -311,7 +323,42 @@
             var someFormattedDate = dd + '-' + mm + '-' + y;
             $('#expiry_date').val(someFormattedDate);
         });
+
     });
+
+    // function updatePayFrequency(){
+    //     var period = $('#repaymentPeriod').val();
+    //     if(period <= 30){
+    //         $('#payFrequency option').each(function() {
+    //             if (this.value !== 'daily') {
+    //                 $(this).prop('disabled', true);
+    //             }
+    //         });
+    //
+    //     }else if(period > 30 && period <= 90){
+    //         $('#payFrequency option').each(function() {
+    //             if (this.value !== 'daily' && this.value !== 'weekly') {
+    //                 $(this).prop('disabled', true);
+    //             }
+    //         });
+    //     }else if(period > 90 && period <= 180){
+    //         $('#payFrequency option').each(function() {
+    //             if (this.value != 'daily' && this.value != 'weekly' && this.value != 'bi-weekly') {
+    //                 $(this).prop('disabled', true);
+    //             }
+    //         });
+    //     }else if(period > 180 && period <= 365){
+    //         $('#payFrequency option').each(function() {
+    //             if (this.value != 'daily' && this.value != 'weekly' && this.value != 'bi-weekly' && this.value != 'monthly') {
+    //                 $(this).prop('disabled', true);
+    //             }
+    //         });
+    //     }
+    //     $('#payFrequency').selectpicker('refresh');
+    //
+    // }
+    //
+    // updatePayFrequency();
 
     function loadClientDetails(userID){
         activateButtons();
@@ -434,6 +481,8 @@
             }
         });
     });
+
+
 
     function displayRestriction(){
         disableButtons();

@@ -1085,7 +1085,11 @@ class Loanaccounts extends CActiveRecord{
         if(Navigation::checkIfAuthorized(51) == 1) {
             $arrayStatus = array('0', '1', '3', '4', '8', '9', '10');
             if (CommonFunctions::searchElementInArray($loanStatus, $arrayStatus) == 0) {
-                $penalty_action = "<a href='#' class='btn btn-primary btn-sm' onclick='Authenticate(\"" . Yii::app()->createUrl('loanaccounts/freeze_penalty/' . $this->loanaccount_id) . "\")' title='Freeze Penalty'><i class='fa fa-adjust'></i></a>";
+                if($this->penalty_frozen  == '0'){
+                    $penalty_action="<a href='#' class='btn btn-primary btn-sm' onclick='Authenticate(\"".Yii::app()->createUrl('loanaccounts/freezePenalty/'.$this->loanaccount_id)."\")' title='Freeze Penalty Accrual'><i class='fa fa-adjust'></i></a>";
+                }else{
+                    $penalty_action="<a href='#' class='btn btn-default btn-sm' onclick='Authenticate(\"".Yii::app()->createUrl('loanaccounts/unfreezePenalty/'.$this->loanaccount_id)."\")' title='Unfreeze Penalty Accrual'><i class='fa fa-asterisk'></i></a>";
+                }
             } else {
                 $penalty_action = "";
             }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ba2c9d3f-e96c-426f-b109-76829124e85c" name="live">
+        <fileTransfer rootFolder="/var/www/html/tclloans" accessType="SFTP" host="45.79.9.222" port="22" sshConfigId="1dd2a604-8e26-4934-842d-e8f1c97d74d6" sshConfig="root@45.79.9.222:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

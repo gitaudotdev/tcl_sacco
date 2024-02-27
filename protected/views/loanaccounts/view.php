@@ -183,6 +183,10 @@ $allowed       = array('2','5','6','7');
                                     <td><div class="text-wrap"><?=date('jS M Y',strtotime($model->repayment_start_date));?></div> </td>
                                 </tr>
                                 <tr>
+                                    <td><div class="text-wrap">Next Penalty Date</div></td>
+                                    <td><div class="text-wrap"><?=date('jS M Y',strtotime($model->next_pay_date));?></div> </td>
+                                </tr>
+                                <tr>
                                     <td><div class="text-wrap">Set Penalty</div></td>
                                     <td><div class="text-wrap"><?=$model->penalty_amount;?></div> </td>
                                 </tr>
